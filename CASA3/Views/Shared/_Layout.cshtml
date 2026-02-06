@@ -1,0 +1,201 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - Casa III</title>
+
+    <!-- Tailwind -->
+    <script src="~/js/tailwind.js" asp-append-version="true"></script>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="~/css/font-awesome.min.css" />
+
+</head>
+<body class="flex flex-col min-h-screen text-gray-800">
+
+    <!-- ================= HEADER ================= -->
+    <header class="bg-white border-b sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+
+                <!-- Logo -->
+                <a asp-controller="Home" asp-action="Index" class="flex items-center">
+                    <img src="~/images/logo.png" alt="Casa III" class="h-8">
+                </a>
+
+                <!-- Desktop Nav -->
+                <nav class="hidden md:flex items-center space-x-6 text-sm font-medium">
+                    <a href="#" class="hover:text-gold">About Us</a>
+
+                    <!-- Dropdown -->
+                    <div class="relative group">
+                        <button class="flex items-center gap-1 hover:text-gold">
+                            Our Projects <i class="fa fa-chevron-down text-xs"></i>
+                        </button>
+                        <div class="absolute left-0 mt-2 w-56 bg-white shadow-lg border hidden group-hover:block">
+                            <a class="block px-4 py-2 hover:bg-gray-100" href="#">Amazon</a>
+                            <a class="block px-4 py-2 hover:bg-gray-100" href="#">Capri Island</a>
+                            <a class="block px-4 py-2 hover:bg-gray-100" href="#">Zanzibar</a>
+                        </div>
+                    </div>
+
+                    <a href="#" class="hover:text-gold">Contact Us</a>
+                    <a href="#" class="hover:text-gold">Blog</a>
+                    <a href="#" class="hover:text-gold">Become a Vendor</a>
+                    <a href="#" class="hover:text-gold">Become an Affiliate</a>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobileMenuBtn" class="md:hidden text-2xl">
+                    <i class="fa fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden border-t bg-white">
+            <div class="px-4 py-4 space-y-3 text-sm">
+                <a class="block" href="#">About Us</a>
+                <details>
+                    <summary class="cursor-pointer">Our Projects</summary>
+                    <div class="ml-4 mt-2 space-y-2">
+                        <a class="block" href="#">Amazon</a>
+                        <a class="block" href="#">Capri Island</a>
+                        <a class="block" href="#">Zanzibar</a>
+                    </div>
+                </details>
+                <a class="block" href="#">Contact Us</a>
+                <a class="block" href="#">Blog</a>
+                <a class="block" href="#">Become a Vendor</a>
+                <a class="block" href="#">Become an Affiliate</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ================= MAIN ================= -->
+    <main class="flex-grow">
+        @RenderBody()
+    </main>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="bg-gray-100 mt-20">
+
+        <!-- Newsletter -->
+        <section class="relative bg-cover bg-center py-20" style="background-image: url('/images/newsletter-bg.jpg');">
+
+            <div class="max-w-7xl mx-auto px-4 flex flex-col lg:flex-row
+                items-start lg:items-center justify-between gap-10">
+
+                <!-- LEFT: CTA -->
+                <div class="flex-shrink-0">
+                    <a href="#"
+                       class="inline-block border border-black px-8 py-3
+                      text-sm font-semibold tracking-wide
+                      hover:bg-black hover:text-white transition">
+                        GET THE CASA III ADVANTAGE
+                    </a>
+                </div>
+
+                <!-- MIDDLE: Socials + Phone (INLINE) -->
+                <div class="flex flex-wrap items-center gap-6 text-lg">
+
+                    <!-- Social Icons -->
+                    <div class="flex items-center gap-4 text-xl">
+                        <a href="#" class="hover:text-black"><i class="fa fa-facebook"></i></a>
+                        <a href="#" class="hover:text-black"><i class="fa fa-instagram"></i></a>
+                        <a href="#" class="hover:text-black"><i class="fa fa-linkedin"></i></a>
+                        <a href="#" class="hover:text-black"><i class="fa fa-twitter"></i></a>
+                    </div>
+
+                    <!-- Divider -->
+                    <span class="hidden sm:block w-px h-6 bg-gray-400"></span>
+
+                    <!-- Phone -->
+                    <div class="flex items-center gap-2 font-medium">
+                        <i class="fa fa-phone"></i>
+                        <span>(+234) 700-222-2111</span>
+                    </div>
+                </div>
+
+                <!-- RIGHT: Subscribe -->
+                <form class="flex w-full lg:w-auto">
+                    <input type="email"
+                           placeholder="Enter your email address to subscribe to our newsletter"
+                           class="w-full lg:w-96 border border-black px-4 py-3
+                       focus:outline-none" />
+
+                    <button type="submit"
+                            class="bg-black text-white px-8 py-3
+                       font-medium hover:bg-gray-800 transition">
+                        Subscribe
+                    </button>
+                </form>
+
+            </div>
+        </section>
+
+        <!-- Partners -->
+        <div class="bg-white py-10 overflow-hidden">
+            <h3 class="text-center text-xl font-semibold mb-8">Our Partners</h3>
+
+            <!-- Slider Track -->
+            <div class="relative w-screen">
+                <div class="flex items-center gap-14 whitespace-nowrap">
+
+                    <!-- Logo Set (1) -->
+                    <img src="~/images/partners/jaiz-1-1.webp" class="h-10 inline-block">
+                    <img src="~/images/partners/metro-2.webp" class="h-10 inline-block">
+                    <img src="~/images/partners/My-project-1-9-1-1.webp" class="h-10 inline-block">
+                    <img src="~/images/partners/jaiz-1-1.webp" class="h-10 inline-block">
+                    <img src="~/images/partners/metro-2.webp" class="h-10 inline-block">
+                    <img src="~/images/partners/My-project-1-9-1-1.webp" class="h-10 inline-block">
+
+                    <!-- Logo Set (2) – duplicate for seamless loop -->
+                    <img src="~/images/partners/jaiz-1-1.webp" class="h-10 inline-block">
+                    <img src="~/images/partners/metro-2.webp" class="h-10 inline-block">
+                    <img src="~/images/partners/My-project-1-9-1-1.webp" class="h-10 inline-block">
+                    <img src="~/images/partners/jaiz-1-1.webp" class="h-10 inline-block">
+                    <img src="~/images/partners/metro-2.webp" class="h-10 inline-block">
+                    <img src="~/images/partners/My-project-1-9-1-1.webp" class="h-10 inline-block">
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="bg-gray-200 py-6">
+            <div class="max-w-7xl mx-auto px-4 text-sm">
+
+                <!-- Mobile Layout -->
+                <div class="flex flex-col gap-3 md:hidden">
+                    <img src="~/images/logo.png" class="h-8 self-start">
+                    <p class="text-center font-bold text-gray-400 hover:text-black transition-colors duration-200 cursor-default">
+                        © No 47 ML Wushishi Crescent Utako Abuja, Adjacent CBN Quarters
+                    </p>
+                </div>
+
+                <!-- Desktop Layout -->
+                <div class="hidden md:flex items-center relative">
+                    <img src="~/images/logo.png" class="h-8">
+
+                    <p class="absolute left-1/2 -translate-x-1/2 text-center font-bold text-gray-400 hover:text-black transition-colors duration-200 cursor-default">
+                        © No 47 ML Wushishi Crescent Utako Abuja, Adjacent CBN Quarters
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        document.getElementById("mobileMenuBtn").onclick = () => {
+            document.getElementById("mobileMenu").classList.toggle("hidden");
+        };
+    </script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
