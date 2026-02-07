@@ -72,14 +72,14 @@ app.MapControllerRoute(
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<EFContext>();
-    //context?.Database.Migrate();
-    //var roleManger = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    //var roles = new[] { "SuperAdmin", "Admin", "Staff" };
-    //foreach (var role in roles)
-    //{
-    //    if (!await roleManger.RoleExistsAsync(role))
-    //        await roleManger.CreateAsync(new IdentityRole(role));
-    //}
+    context?.Database.Migrate();
+    var roleManger = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    var roles = new[] { "SuperAdmin", "Admin", "Staff" };
+    foreach (var role in roles)
+    {
+        if (!await roleManger.RoleExistsAsync(role))
+            await roleManger.CreateAsync(new IdentityRole(role));
+    }
 }
 app.Run();
 
