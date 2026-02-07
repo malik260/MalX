@@ -1,0 +1,99 @@
+﻿@{
+    ViewData["Title"] = "Contact Us";
+}
+
+<!-- Hero Section -->
+<section class="relative h-[85vh] overflow-hidden">
+    <!-- Background Image -->
+    <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('/images/call-center.webp');"></div>
+
+    <!-- Overlay (optional, for better text readability) -->
+    <div class="absolute inset-0 bg-black/10"></div>
+    <div class="relative z-10 h-full flex items-center">
+        <div class="max-w-7xl mx-auto px-6 w-full">
+            <div class="max-w-md">
+                <!-- Main Title -->
+                <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold mb-4" style="color: #4A4A4A;">
+                    CONTACT US
+                </h1>
+
+                <!-- Subtitle -->
+                <p class="text-2xl md:text-3xl lg:text-4xl font-normal" style="color: #7A7A7A;">
+                   CONTACT US NOW !!!
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Connect Hero + Form -->
+<section class="relative py-12">
+    <div class="relative max-w-7xl mx-auto px-6 py-20 bg-cover bg-center" style="background-image: url('/images/contact-us-form-bg.jpg');">
+        <h2 class="text-5xl font-bold text-center text-white mb-4">CONNECT WITH US</h2>
+        <p class="text-center text-white/90 mb-12">Thank you for reaching out to Bilaad Realty. To help us direct your enquiry to the right department, please provide the following information:</p>
+
+        <form asp-controller="Home" asp-action="ContactUs" id="mainContactForm" class="bg-transparent max-w-6xl mx-auto" method="post">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="text-white text-sm">First Name <span class="text-red-500">*</span></label>
+                    <input id="FirstName" type="text" name="FirstName" class="w-full mt-2 bg-transparent border border-white/60 px-3 py-3 text-white placeholder-white/60 focus:outline-none" placeholder="First Name" />
+                </div>
+                <div>
+                    <label class="text-white text-sm">Last Name <span class="text-red-500">*</span></label>
+                    <input id="LastName" type="text" name="LastName" class="w-full mt-2 bg-transparent border border-white/60 px-3 py-3 text-white placeholder-white/60 focus:outline-none" placeholder="Last Name" />
+                </div>
+
+                <div>
+                    <label class="text-white text-sm">Email Address <span class="text-red-500">*</span></label>
+                    <input id="Email" type="email" name="Email" class="w-full mt-2 bg-transparent border border-white/60 px-3 py-3 text-white placeholder-white/60 focus:outline-none" placeholder="Email Address" />
+                </div>
+
+                <div>
+                    <label class="text-white text-sm">Phone Number</label>
+                    <input id="Phone" type="tel" name="Phone" class="w-full mt-2 bg-transparent border border-white/60 px-3 py-3 text-white placeholder-white/60 focus:outline-none" placeholder="Phone Number" />
+                </div>
+
+                <div class="md:col-span-2">
+                    <label class="text-white text-sm">Your Request</label>
+                    <select id="Request" name="Request" class="w-full mt-2 bg-white text-gray-800 px-3 py-3">
+                        <option>Your Request</option>
+                        <option>General Enquiry</option>
+                        <option>Project Sales</option>
+                        <option>Vendor Inquiry</option>
+                    </select>
+                </div>
+
+                <div class="md:col-span-2">
+                    <label class="text-white text-sm">Your Budget</label>
+                    <input id="Budget" type="text" name="Budget" class="w-full mt-2 bg-transparent border border-white/60 px-3 py-3 text-white placeholder-white/60 focus:outline-none" placeholder="Your Budget" />
+                </div>
+
+                <div class="md:col-span-2">
+                    <label class="text-white text-sm">Message <span class="text-red-500">*</span></label>
+                    <textarea id="Message" name="Message" rows="6" maxlength="180" class="w-full mt-2 bg-transparent border border-white/60 px-3 py-3 text-white placeholder-white/60 focus:outline-none" placeholder="Message"></textarea>
+                    <div class="text-white/60 text-right text-sm mt-1">0 / 180</div>
+                </div>
+
+                <div class="md:col-span-2">
+                    <button id="mainContactSubmit" type="submit" class="bg-white text-gray-800 px-6 py-2 rounded">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+<!-- Map Section -->
+<section class="bg-white">
+    <div class=" max-w-7xl mx-auto">
+        <div class="h-96 w-full overflow-hidden shadow">
+            <!-- Embedded Google Map centered on 47 M.L. Wushishi St, Abuja -->
+            <iframe
+                width="100%"
+                height="100%"
+                frameborder="0"
+                style="border:0"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3937.1234567890123!2d7.444444!3d9.066667!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x11a5c5d1d1d1d1d1%3A0xabcdef1234567890!2s47%20M.L.%20Wushishi%20St%2C%20Mabushi%2C%20Abuja%20900108%2C%20Federal%20Capital%20Territory!5e0!3m2!1sen!2sng!4v1700000000000"
+                allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+        </div>
+    </div>
+</section>

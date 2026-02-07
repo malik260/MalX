@@ -299,6 +299,83 @@ namespace CASA3.Controllers
             
             return View(model);
         }
+        [HttpPost]
+        public IActionResult ContactUs(ContactFormDto form)
+        {
+            // Basic server-side validation
+            if (form == null || string.IsNullOrWhiteSpace(form.FirstName) || string.IsNullOrWhiteSpace(form.Email) || string.IsNullOrWhiteSpace(form.Message))
+            {
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                {
+                    return Json(new { success = false, message = "Please fill required fields." });
+                }
+
+                TempData["ContactError"] = "Please fill required fields.";
+                return RedirectToAction("ContactUs");
+            }
+
+            // TODO: persist enquiry / send email - placeholder for now
+
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return Json(new { success = true, message = "Thank you for contacting us. We'll be in touch shortly." });
+            }
+
+            TempData["ContactSuccess"] = "Thank you for contacting us. We'll be in touch shortly.";
+            return RedirectToAction("ContactUs");
+        }
+        public IActionResult ContactUs()
+        {
+            // Partners data - Set in ViewData for layout access
+            ViewData["Partners"] = GetPartners();
+
+            // Projects data for navigation dropdown - Set in ViewData for layout access
+            ViewData["Projects"] = GetProjects();
+
+            ViewData["Title"] = "About Us";
+
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult SubscribeNewsletter(NewsletterSubscriptionDto subscription)
+        {
+            // Basic validation
+            if (subscription == null || string.IsNullOrWhiteSpace(subscription.Email))
+            {
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                {
+                    return Json(new { success = false, message = "Please enter a valid email address." });
+                }
+
+                TempData["NewsletterError"] = "Please enter a valid email address.";
+                return RedirectToAction("Index");
+            }
+
+            // Validate email format
+            var emailRegex = @"^[^\s@]+@[^\s@]+\.[^\s@]+$";
+            if (!System.Text.RegularExpressions.Regex.IsMatch(subscription.Email, emailRegex))
+            {
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                {
+                    return Json(new { success = false, message = "Please enter a valid email address." });
+                }
+
+                TempData["NewsletterError"] = "Please enter a valid email address.";
+                return RedirectToAction("Index");
+            }
+
+            // TODO: Save to database or send email confirmation
+
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return Json(new { success = true, message = "Thank you for subscribing! Check your email for confirmation." });
+            }
+
+            TempData["NewsletterSuccess"] = "Thank you for subscribing! Check your email for confirmation.";
+            return RedirectToAction("Index");
+        }
+
         public IActionResult Privacy()
         {
             return View();
