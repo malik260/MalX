@@ -1,0 +1,410 @@
+@model Core.ViewModels.HomePageVM
+
+@{
+    ViewData["Title"] = "Blog";
+}
+
+<!-- Hero Section -->
+<section class="relative h-[50vh] overflow-hidden">
+    <!-- Background Image -->
+    <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('/images/about-us-hero.jpg');"></div>
+    
+    <!-- Overlay -->
+    <div class="absolute inset-0 bg-black/10"></div>
+    
+    <!-- Content -->
+    <div class="relative z-10 h-full flex items-center">
+        <div class="max-w-7xl mx-auto px-6 w-full">
+            <div>
+                <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold mb-4" style="color: #4A4A4A;">
+                    BLOG
+                </h1>
+                <p class="text-lg text-gray-600">
+                    <a href="/" class="hover:text-gray-800">HOME</a> | <span>BLOG</span>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Blog Content Section -->
+<section class="bg-white py-16 md:py-24">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="grid lg:grid-cols-3 gap-12">
+            
+            <!-- Left Column - Blog Posts -->
+            <div class="lg:col-span-2">
+                <!-- Page Info -->
+                <div id="pageInfo" class="mb-8 pb-6 border-b border-gray-200">
+                    <p class="text-gray-600">
+                        <span class="font-semibold">Page <span id="currentPage">1</span> of <span id="totalPages">1</span></span>
+                        <span class="text-sm text-gray-500 ml-2">(<span id="totalItems">0</span> total posts)</span>
+                    </p>
+                </div>
+
+                <div id="blogPostsContainer" class="space-y-12">
+                    <!-- Posts will be rendered here by JavaScript -->
+                    @foreach (var post in Model.BlogPosts)
+                    {
+                        <article class="border-b pb-12 last:border-b-0">
+                            <!-- Blog Post Header with Date and Category -->
+                            <div class="mb-4">
+                                <span class="text-sm uppercase tracking-wide" style="color: #b39359;">
+                                    @post.Category
+                                </span>
+                                <span class="text-sm text-gray-500 ml-4">
+                                    @post.PublishedDate.ToString("MMMM dd, yyyy")
+                                </span>
+                            </div>
+
+                            <!-- Blog Post Title -->
+                            <h2 class="text-3xl md:text-4xl font-bold mb-6" style="color: #4A4A4A;">
+                                @post.Title
+                            </h2>
+
+                            <!-- Blog Cover Image -->
+                            @if (!string.IsNullOrEmpty(post.CoverImageUrl))
+                            {
+                                <div class="mb-8 overflow-hidden rounded-lg shadow-md">
+                                    <img src="@post.CoverImageUrl" 
+                                         alt="@post.Title" 
+                                         class="w-full h-auto object-cover aspect-video"
+                                         onerror="this.src='/images/projects/project-1.webp'" />
+                                </div>
+                            }
+
+                            <!-- Blog Excerpt -->
+                            <p class="text-gray-700 text-base md:text-lg leading-relaxed mb-6">
+                                @post.Excerpt
+                            </p>
+
+                            <!-- Read More Link -->
+                            <a href="@Url.Action("BlogDetails", "Home", new { id = post.Id })" class="inline-flex items-center gap-3 text-gray-800 hover:text-gray-600 transition-colors font-medium">
+                                Read More
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </a>
+                        </article>
+                    }
+                </div>
+
+                <!-- Pagination Controls -->
+                <div id="paginationContainer" class="mt-12 pt-8 border-t border-gray-200">
+                    <!-- Pagination will be rendered here by JavaScript -->
+                    @if (Model.Pagination != null && Model.Pagination.TotalPages > 1)
+                    {
+                        <nav class="flex items-center justify-center gap-2">
+                            <!-- Previous Button -->
+                            @if (Model.Pagination.HasPreviousPage)
+                            {
+                                <a href="#" onclick="return false;" class="paginationBtn px-4 py-2 rounded border border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors" data-page="@(Model.Pagination.CurrentPage - 1)">
+                                    ← Previous
+                                </a>
+                            }
+                            else
+                            {
+                                <span class="px-4 py-2 rounded border border-gray-200 text-gray-400 cursor-not-allowed">
+                                    ← Previous
+                                </span>
+                            }
+
+                            <!-- Page Numbers -->
+                            <div class="flex gap-1 mx-4" id="pageNumbers">
+                                @for (int i = 1; i <= Model.Pagination.TotalPages; i++)
+                                {
+                                    @if (i == Model.Pagination.CurrentPage)
+                                    {
+                                        <span class="px-3 py-2 rounded" style="background-color: #b39359; color: white; font-weight: bold;">
+                                            @i
+                                        </span>
+                                    }
+                                    else if (i == 1 || i == Model.Pagination.TotalPages || (i >= Model.Pagination.CurrentPage - 1 && i <= Model.Pagination.CurrentPage + 1))
+                                    {
+                                        <a href="#" onclick="return false;" class="paginationBtn px-3 py-2 rounded border border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors" data-page="@i">
+                                            @i
+                                        </a>
+                                    }
+                                    else if (i == 2 || i == Model.Pagination.TotalPages - 1)
+                                    {
+                                        <span class="px-2 py-2 text-gray-500">...</span>
+                                    }
+                                }
+                            </div>
+
+                            <!-- Next Button -->
+                            @if (Model.Pagination.HasNextPage)
+                            {
+                                <a href="#" onclick="return false;" class="paginationBtn px-4 py-2 rounded border border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors" data-page="@(Model.Pagination.CurrentPage + 1)">
+                                    Next →
+                                </a>
+                            }
+                            else
+                            {
+                                <span class="px-4 py-2 rounded border border-gray-200 text-gray-400 cursor-not-allowed">
+                                    Next →
+                                </span>
+                            }
+                        </nav>
+                    }
+                </div>
+            </div>
+
+            <!-- Right Column - Sidebar -->
+            <div class="lg:col-span-1">
+                <!-- Search Section -->
+                <div class="mb-12">
+                    <h3 class="text-2xl font-bold mb-6" style="color: #4A4A4A;">SEARCH</h3>
+                    <div class="flex flex-col gap-4">
+                        <div class="relative">
+                            <input type="text" 
+                                   id="blogSearchInput"
+                                   placeholder="Search blog posts..." 
+                                   value="@Model.Pagination?.SearchQuery"
+                                   class="w-full border-b-2 border-gray-300 px-0 py-3 focus:outline-none focus:border-gray-800 transition-colors" />
+                        </div>
+                        <div class="w-full flex justify-center text-gray-500 text-sm" id="searchStatus">
+                            Start typing to search...
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Social Media Section -->
+                <div class="mb-12">
+                    <h3 class="text-2xl font-bold mb-6" style="color: #4A4A4A;">FOLLOW US</h3>
+                    <div class="flex gap-4 text-2xl">
+                        <a href="#" class="text-gray-600 hover:text-gray-800 transition-colors">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                        <a href="#" class="text-gray-600 hover:text-gray-800 transition-colors">
+                            <i class="fa fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-600 hover:text-gray-800 transition-colors">
+                            <i class="fa fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="text-gray-600 hover:text-gray-800 transition-colors">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Recent Posts Section -->
+                <div>
+                    <h3 class="text-2xl font-bold mb-6" style="color: #4A4A4A;">RECENT POSTS</h3>
+                    <div class="space-y-6">
+                        @if (Model.RecentBlogPosts != null && Model.RecentBlogPosts.Any())
+                        {
+                            @foreach (var post in Model.RecentBlogPosts)
+                            {
+                                <div class="pb-6 border-b last:border-b-0 last:pb-0">
+                                    <!-- Date -->
+                                    <p class="text-sm uppercase tracking-wide mb-2" style="color: #b39359;">
+                                        @post.PublishedDate.ToString("MMMM dd, yyyy")
+                                    </p>
+                                    
+                                    <!-- Title -->
+                                    <a href="@Url.Action("BlogDetails", "Home", new { id = post.Id })" class="block text-base font-semibold text-gray-800 hover:text-gray-600 transition-colors line-clamp-2">
+                                        @post.Title
+                                    </a>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <p class="text-gray-500">No recent posts available.</p>
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<script>
+(function() {
+    const searchInput = document.getElementById('blogSearchInput');
+    const searchStatus = document.getElementById('searchStatus');
+    const blogPostsContainer = document.getElementById('blogPostsContainer');
+    const paginationContainer = document.getElementById('paginationContainer');
+    const pageInfo = document.getElementById('pageInfo');
+    let searchTimeout;
+    let previousSearchValue = '';
+
+    // Delegated click handler for pagination buttons (attach once)
+    document.addEventListener('click', function(e) {
+        const btn = e.target.closest && e.target.closest('.paginationBtn');
+        if (btn) {
+            e.preventDefault();
+            const page = btn.getAttribute('data-page');
+            fetchBlogData(page, searchInput.value.trim());
+        }
+    });
+
+    // Format date helper
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        return date.toLocaleDateString('en-US', options);
+    }
+
+    // Render blog posts
+    function renderBlogPosts(posts) {
+        if (!posts || posts.length === 0) {
+            blogPostsContainer.innerHTML = '<div class="text-center py-12"><p class="text-gray-500">No blog posts found. Try adjusting your search.</p></div>';
+            return;
+        }
+
+        let html = '';
+        posts.forEach(post => {
+            html += `
+                <article class="border-b pb-12 last:border-b-0">
+                    <div class="mb-4">
+                        <span class="text-sm uppercase tracking-wide" style="color: #b39359;">
+                            ${post.category}
+                        </span>
+                        <span class="text-sm text-gray-500 ml-4">
+                            ${formatDate(post.publishedDate)}
+                        </span>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6" style="color: #4A4A4A;">
+                        ${post.title}
+                    </h2>
+                    ${post.coverImageUrl ? `
+                        <div class="mb-8 overflow-hidden rounded-lg shadow-md">
+                            <img src="${post.coverImageUrl}" 
+                                 alt="${post.title}" 
+                                 class="w-full h-auto object-cover aspect-video"
+                                 onerror="this.src='/images/projects/project-1.webp'" />
+                        </div>
+                    ` : ''}
+                    <p class="text-gray-700 text-base md:text-lg leading-relaxed mb-6">
+                        ${post.excerpt}
+                    </p>
+                    <a href="${'@Url.Action("BlogDetails","Home")'}/${post.id}" class="inline-flex items-center gap-3 text-gray-800 hover:text-gray-600 transition-colors font-medium">
+                        Read More
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                </article>
+            `;
+        });
+        blogPostsContainer.innerHTML = html;
+    }
+
+    // Render pagination
+    function renderPagination(pagination) {
+        if (pagination.totalPages <= 1) {
+            paginationContainer.innerHTML = '';
+            return;
+        }
+
+        let html = '<nav class="flex items-center justify-center gap-2">';
+
+        // Previous button
+        if (pagination.hasPreviousPage) {
+            html += `<a href="#" class="paginationBtn px-4 py-2 rounded border border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors" data-page="${pagination.currentPage - 1}">← Previous</a>`;
+        } else {
+            html += '<span class="px-4 py-2 rounded border border-gray-200 text-gray-400 cursor-not-allowed">← Previous</span>';
+        }
+
+        // Page numbers
+        html += '<div class="flex gap-1 mx-4">';
+        for (let i = 1; i <= pagination.totalPages; i++) {
+            if (i === pagination.currentPage) {
+                html += `<span class="px-3 py-2 rounded" style="background-color: #b39359; color: white; font-weight: bold;">${i}</span>`;
+            } else if (i === 1 || i === pagination.totalPages || (i >= pagination.currentPage - 1 && i <= pagination.currentPage + 1)) {
+                html += `<a href="#" class="paginationBtn px-3 py-2 rounded border border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors" data-page="${i}">${i}</a>`;
+            } else if (i === 2 || i === pagination.totalPages - 1) {
+                html += '<span class="px-2 py-2 text-gray-500">...</span>';
+            }
+        }
+        html += '</div>';
+
+        // Next button
+        if (pagination.hasNextPage) {
+            html += `<a href="#" class="paginationBtn px-4 py-2 rounded border border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors" data-page="${pagination.currentPage + 1}">Next →</a>`;
+        } else {
+            html += '<span class="px-4 py-2 rounded border border-gray-200 text-gray-400 cursor-not-allowed">Next →</span>';
+        }
+
+        html += '</nav>';
+        paginationContainer.innerHTML = html;
+
+        // pagination buttons are handled by the delegated listener attached once
+    }
+
+    // Update page info
+    function updatePageInfo(pagination) {
+        document.getElementById('currentPage').textContent = pagination.currentPage;
+        document.getElementById('totalPages').textContent = pagination.totalPages;
+        document.getElementById('totalItems').textContent = pagination.totalItems;
+    }
+
+    // Fetch blog data via AJAX
+    function fetchBlogData(page = 1, search = '') {
+        searchStatus.textContent = 'Loading...';
+        
+        const params = new URLSearchParams();
+        params.append('page', page);
+        if (search) {
+            params.append('search', search);
+        }
+
+        fetch(`@Url.Action("Blog")?${params.toString()}`, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            renderBlogPosts(data.blogPosts);
+            renderPagination(data.pagination);
+            updatePageInfo(data.pagination);
+            searchStatus.textContent = search ? `Found ${data.pagination.totalItems} post(s)` : 'Start typing to search...';
+            
+            // Scroll to top of blog posts
+            document.getElementById('pageInfo').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        })
+        .catch(error => {
+            console.error('Error fetching blog data:', error);
+            searchStatus.textContent = 'Error loading posts. Please try again.';
+        });
+    }
+
+    // Search input event listener
+    searchInput.addEventListener('keyup', function() {
+        clearTimeout(searchTimeout);
+        const query = this.value.trim();
+        
+        // If search becomes empty after having content, reload first page
+        if (query.length === 0 && previousSearchValue.length > 0) {
+            fetchBlogData(1, '');
+            previousSearchValue = '';
+            return;
+        }
+
+        if (query.length === 0) {
+            searchStatus.textContent = 'Start typing to search...';
+            previousSearchValue = '';
+            return;
+        }
+
+        previousSearchValue = query;
+        searchTimeout = setTimeout(() => {
+            fetchBlogData(1, query);
+        }, 300); // Debounce search by 300ms
+    });
+
+    // Load initial data on page load
+    window.addEventListener('load', function() {
+        const initialSearch = searchInput.value.trim();
+        if (initialSearch) {
+            fetchBlogData(1, initialSearch);
+        }
+    });
+})();
+</script>

@@ -17,9 +17,9 @@ function ConvertPictureToBase64(inputId) {
         base64ProfilePix = "";
     }
 }
-$(document).ready(function () {
-    $('.mtg-select2').select2();
-});
+// $(document).ready(function () {
+//     $('.mtg-select2').select2();
+// });
 //<---- For email vaildation---->
 function validateEmail(inputId) {
     const emailInput = document.getElementById(inputId);

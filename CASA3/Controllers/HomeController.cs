@@ -376,9 +376,189 @@ namespace CASA3.Controllers
             return RedirectToAction("Index");
         }
 
+        public IActionResult Blog(int page = 1, string search = "")
+        {
+            var model = new HomePageVM();
+
+            // Dummy blog posts
+            var allBlogPosts = new List<BlogPostDto>
+            {
+                new BlogPostDto
+                {
+                    Id = 1,
+                    Title = "BUYING YOUR FIRST HOME IN NIGERIA: A COMPLETE STEP-BY-STEP GUIDE.",
+                    Slug = "buying-first-home-nigeria",
+                    Category = "Real Estate Investment Guide",
+                    PublishedDate = new DateTime(2025, 11, 11),
+                    Content = "This comprehensive guide walks you through every step of purchasing your first home in Nigeria. Learn about the legal requirements, financial planning, property inspection, and documentation needed to make an informed decision.",
+                    Excerpt = "A complete guide to buying your first property in Nigeria with expert tips and step-by-step instructions.",
+                    CoverImageUrl = "/images/blog/blog-1.webp",
+                    Author = "Dr. Emmanuel Bassi Usman",
+                    Views = 1250
+                },
+                new BlogPostDto
+                {
+                    Id = 2,
+                    Title = "THE FUTURE OF SUSTAINABLE REAL ESTATE DEVELOPMENT IN AFRICA",
+                    Slug = "sustainable-real-estate-africa",
+                    Category = "Market Trends",
+                    PublishedDate = new DateTime(2025, 10, 28),
+                    Content = "Explore the emerging trends in sustainable real estate development across Africa. Discover how green building practices, renewable energy integration, and community-focused development are reshaping the landscape.",
+                    Excerpt = "An in-depth look at sustainability trends revolutionizing African real estate markets.",
+                    CoverImageUrl = "/images/blog/blog-2.webp",
+                    Author = "Abdulfatai Musa",
+                    Views = 892
+                },
+                new BlogPostDto
+                {
+                    Id = 3,
+                    Title = "PROPERTY INVESTMENT: MAXIMIZING RETURNS AND MINIMIZING RISKS",
+                    Slug = "property-investment-strategies",
+                    Category = "Investment Tips",
+                    PublishedDate = new DateTime(2025, 09, 15),
+                    Content = "Learn strategic approaches to real estate investment that can help you build wealth over time. This guide covers risk assessment, portfolio diversification, and long-term value creation.",
+                    Excerpt = "Master the art of real estate investment with proven strategies for success.",
+                    CoverImageUrl = "/images/blog/blog-3.webp",
+                    Author = "Abdulkadir Abdulkadir",
+                    Views = 756
+                },
+                new BlogPostDto
+                {
+                    Id = 4,
+                    Title = "UNDERSTANDING THE NIGERIAN REAL ESTATE MARKET: A 2025 OVERVIEW",
+                    Slug = "nigerian-real-estate-2025",
+                    Category = "Market Analysis",
+                    PublishedDate = new DateTime(2025, 08, 22),
+                    Content = "Get an overview of the current state of the Nigerian real estate market. Understand key market indicators, growth opportunities, and factors influencing property values in 2025.",
+                    Excerpt = "Comprehensive analysis of Nigeria's real estate market trends and opportunities.",
+                    CoverImageUrl = "/images/blog/blog-4.webp",
+                    Author = "Dr. Emmanuel Bassi Usman",
+                    Views = 1124
+                },
+                new BlogPostDto
+                {
+                    Id = 5,
+                    Title = "COMMERCIAL VS RESIDENTIAL PROPERTIES: WHICH IS RIGHT FOR YOU?",
+                    Slug = "commercial-vs-residential",
+                    Category = "Property Types",
+                    PublishedDate = new DateTime(2025, 07, 10),
+                    Content = "Compare the benefits and challenges of investing in commercial versus residential properties. Discover which option aligns best with your financial goals and investment timeline.",
+                    Excerpt = "A detailed comparison to help you choose the right property investment type.",
+                    CoverImageUrl = "/images/blog/blog-5.webp",
+                    Author = "Mallam Halliru Sa'ad",
+                    Views = 634
+                },
+                new BlogPostDto
+                {
+                    Id = 6,
+                    Title = "THE ROLE OF TECHNOLOGY IN MODERN REAL ESTATE TRANSACTIONS",
+                    Slug = "technology-real-estate",
+                    Category = "Technology & Innovation",
+                    PublishedDate = new DateTime(2025, 06, 18),
+                    Content = "Discover how technology is transforming the real estate industry. From virtual property tours to blockchain-based transactions, explore innovations reshaping how we buy and sell properties.",
+                    Excerpt = "How digital innovation is revolutionizing real estate transactions and property management.",
+                    CoverImageUrl = "/images/blog/blog-6.webp",
+                    Author = "Tech Innovation Team",
+                    Views = 892
+                }
+            };
+
+            // Filter by search query
+            var filteredPosts = allBlogPosts;
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                filteredPosts = allBlogPosts
+                    .Where(b => b.Title.Contains(search, StringComparison.OrdinalIgnoreCase)
+                             || b.Category.Contains(search, StringComparison.OrdinalIgnoreCase)
+                             || b.Excerpt.Contains(search, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
+
+            // Setup pagination
+            int pageSize = 5;
+            int totalItems = filteredPosts.Count;
+            int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+
+            // Validate page number
+            if (page < 1) page = 1;
+            if (page > totalPages && totalPages > 0) page = totalPages;
+
+            model.Pagination = new Core.Models.PaginationModel
+            {
+                TotalItems = totalItems,
+                ItemsPerPage = pageSize,
+                CurrentPage = page,
+                SearchQuery = search ?? ""
+            };
+
+            // Apply pagination using Skip and Take
+            model.BlogPosts = filteredPosts
+                .OrderByDescending(b => b.PublishedDate)
+                .Skip(model.Pagination.SkipCount)
+                .Take(pageSize)
+                .ToList();
+
+            // Recent posts - Get the 3 most recent from all posts (not filtered)
+            model.RecentBlogPosts = allBlogPosts
+                .OrderByDescending(b => b.PublishedDate)
+                .Take(3)
+                .ToList();
+
+            // Check if this is an AJAX request
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return Json(new
+                {
+                    blogPosts = model.BlogPosts,
+                    pagination = new
+                    {
+                        currentPage = model.Pagination.CurrentPage,
+                        totalPages = model.Pagination.TotalPages,
+                        totalItems = model.Pagination.TotalItems,
+                        searchQuery = model.Pagination.SearchQuery,
+                        hasPreviousPage = model.Pagination.HasPreviousPage,
+                        hasNextPage = model.Pagination.HasNextPage
+                    }
+                });
+            }
+
+            // Partners data - Set in ViewData for layout access
+            ViewData["Partners"] = GetPartners();
+
+            // Projects data for navigation dropdown - Set in ViewData for layout access
+            ViewData["Projects"] = GetProjects();
+
+            ViewData["Title"] = "Blog";
+
+            return View(model);
+        }
+
         public IActionResult Privacy()
         {
             return View();
+        }
+
+        public IActionResult BlogDetails(int id)
+        {
+            // Create same dummy posts as in Blog action and find by id
+            var allBlogPosts = new List<BlogPostDto>
+            {
+                new BlogPostDto { Id = 1, Title = "BUYING YOUR FIRST HOME IN NIGERIA: A COMPLETE STEP-BY-STEP GUIDE.", Slug = "buying-first-home-nigeria", Category = "Real Estate Investment Guide", PublishedDate = new DateTime(2025,11,11), Content = "This is a detailed dummy content used for blog details. Replace with real content later.", Excerpt = "A complete guide to buying your first property in Nigeria...", CoverImageUrl = "/images/blog/blog-1.webp", Author = "Dr. Emmanuel Bassi Usman", Views = 1250 },
+                new BlogPostDto { Id = 2, Title = "THE FUTURE OF SUSTAINABLE REAL ESTATE DEVELOPMENT IN AFRICA", Slug = "sustainable-real-estate-africa", Category = "Market Trends", PublishedDate = new DateTime(2025,10,28), Content = "This is a detailed dummy content used for blog details. Replace with real content later.", Excerpt = "An in-depth look at sustainability trends...", CoverImageUrl = "/images/blog/blog-2.webp", Author = "Abdulfatai Musa", Views = 892 },
+                new BlogPostDto { Id = 3, Title = "PROPERTY INVESTMENT: MAXIMIZING RETURNS AND MINIMIZING RISKS", Slug = "property-investment-strategies", Category = "Investment Tips", PublishedDate = new DateTime(2025,9,15), Content = "This is a detailed dummy content used for blog details. Replace with real content later.", Excerpt = "Master the art of real estate investment...", CoverImageUrl = "/images/blog/blog-3.webp", Author = "Abdulkadir Abdulkadir", Views = 756 },
+                new BlogPostDto { Id = 4, Title = "UNDERSTANDING THE NIGERIAN REAL ESTATE MARKET: A 2025 OVERVIEW", Slug = "nigerian-real-estate-2025", Category = "Market Analysis", PublishedDate = new DateTime(2025,8,22), Content = "This is a detailed dummy content used for blog details. Replace with real content later.", Excerpt = "Comprehensive analysis of Nigeria's real estate market...", CoverImageUrl = "/images/blog/blog-4.webp", Author = "Dr. Emmanuel Bassi Usman", Views = 1124 },
+                new BlogPostDto { Id = 5, Title = "COMMERCIAL VS RESIDENTIAL PROPERTIES: WHICH IS RIGHT FOR YOU?", Slug = "commercial-vs-residential", Category = "Property Types", PublishedDate = new DateTime(2025,7,10), Content = "This is a detailed dummy content used for blog details. Replace with real content later.", Excerpt = "A detailed comparison to help you choose the right property...", CoverImageUrl = "/images/blog/blog-5.webp", Author = "Mallam Halliru Sa'ad", Views = 634 },
+                new BlogPostDto { Id = 6, Title = "THE ROLE OF TECHNOLOGY IN MODERN REAL ESTATE TRANSACTIONS", Slug = "technology-real-estate", Category = "Technology & Innovation", PublishedDate = new DateTime(2025,6,18), Content = "This is a detailed dummy content used for blog details. Replace with real content later.", Excerpt = "How digital innovation is revolutionizing real estate...", CoverImageUrl = "/images/blog/blog-6.webp", Author = "Tech Innovation Team", Views = 892 }
+            };
+
+            var post = allBlogPosts.FirstOrDefault(p => p.Id == id) ?? allBlogPosts.First();
+
+            // Partners and projects for layout
+            ViewData["Partners"] = GetPartners();
+            ViewData["Projects"] = GetProjects();
+            ViewData["Title"] = post.Title;
+
+            return View(post);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

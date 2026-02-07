@@ -21,6 +21,7 @@
     <!-- Tailwind -->
     <script src="~/js/tailwind.js" asp-append-version="true"></script>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    @* <link href="~/css/select2.min.css" rel="stylesheet" /> *@
 
 
     <!-- jQuery -->
@@ -28,7 +29,7 @@
     <script src="~/js/jquery-ui.min.js"></script>
     <script src="~/js/jquery.ui.touch-punch.min.js"></script>
     <!-- Select2 JS -->
-    <script src="~/js/select2.min.js"></script>
+    @* <script src="~/js/select2.min.js"></script> *@
     <!-- Bootstrap Core JS -->
     <script src="~/js/popper.min.js"></script>
     <script src="~/js/sweetalert2.all.min.js"></script>
@@ -171,7 +172,7 @@
                     </div>
 
                     <a asp-controller="Home" asp-action="ContactUs" class="text-gray-700 hover:text-gray-900 transition-colors">Contact Us</a>
-                    <a href="#" class="text-gray-700 hover:text-gray-900 transition-colors">Blog</a>
+                    <a asp-controller="Home" asp-action="Blog" class="text-gray-700 hover:text-gray-900 transition-colors">Blog</a>
                     <a href="#" class="text-gray-700 hover:text-gray-900 transition-colors">Become A Vendor</a>
                     <a href="#" class="text-gray-700 hover:text-gray-900 transition-colors">Become An Affiliate.</a>
                 </nav>
@@ -197,7 +198,7 @@
                     </div>
                 </details>
                 <a asp-controller="Home" asp-action="ContactUs" class="block text-gray-800">Contact Us</a>
-                <a class="block text-gray-800" href="#">Blog</a>
+                <a asp-controller="Home" asp-action="Blog" class="block text-gray-800">Blog</a>
                 <a class="block text-gray-800" href="#">Become A Vendor</a>
                 <a class="block text-gray-800" href="#">Become An Affiliate.</a>
             </div>
