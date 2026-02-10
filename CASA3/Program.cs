@@ -75,6 +75,9 @@ app.MapControllerRoute(
 
 using (var scope = app.Services.CreateScope())
 {
+    Console.WriteLine("CONNECTION = " +
+    builder.Configuration.GetConnectionString("Casa3DbConnection"));
+
     var context = scope.ServiceProvider.GetRequiredService<EFContext>();
     context?.Database.Migrate();
     var roleManger = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
