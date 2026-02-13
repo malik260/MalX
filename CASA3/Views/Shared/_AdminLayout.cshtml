@@ -1,150 +1,372 @@
+@{
+    var user = Util.GetCurrentUser();
+    var year = DateTime.Now.Year;
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>@ViewData["Title"] - Admin - Casa III</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="~/css/font-awesome.min.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <meta name="keywords" content="admin, estimates, bootstrap, business, corporate, creative, management, minimal, modern, accounts, invoice, html5, responsive, CRM, Projects">
+    <title>@ViewData["Title"] - CASAIII</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        .admin-sidebar {
-            background: linear-gradient(180deg, #1a3837 0%, #1E403F 15%, #1E403F 85%, #162d2c 100%);
-            box-shadow: 4px 0 24px rgba(0,0,0,0.08);
+    <link rel="stylesheet" href="~/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="~/css/sweetalert2.min.css" />
+    <link rel="stylesheet" href="~/css/bootstrap.min.css" />
+
+    <!-- jQuery -->
+    <script src="~/js/jquery-3.5.1.min.js"></script>
+    <script src="~/js/jquery-ui.min.js"></script>
+    <script src="~/js/jquery.ui.touch-punch.min.js"></script>
+    <!-- Select2 JS -->
+    <script src="~/js/select2.min.js"></script>
+    <!-- Bootstrap Core JS -->
+    <script src="~/js/popper.min.js"></script>
+    <script src="~/js/bootstrap.min.js"></script>
+    <script src="~/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/bootstrap-select.min.js"></script>
+    <!-- Slimscroll JS -->
+    <script src="~/js/jquery.slimscroll.min.js"></script>
+    <!-- Datatable JS -->
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/dataTables.bootstrap4.min.js"></script>
+    <!-- Datetimepicker JS -->
+    <script src="~/js/moment.min.js"></script>
+    <script src="~/js/bootstrap-datetimepicker.min.js"></script>
+    <!-- Custom JS -->
+    <script src="~/js/app.js"></script>
+    <script src="~/js/sweetalert2.all.min.js"></script>
+    <script src="~/js/sweetalert.min.js"></script>
+    <!-- My script -->
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/common.js" asp-append-version="true"></script>
+    <script src="~/js/account.js" asp-append-version="true"></script>
+    <!-- Tailwind Js -->
+    <script src="~/js/tailwind.js" asp-append-version="true"></script>
+    <!-- Summernote JS -->
+    @* <script src="~/plugins/summernote/summernote-bs4.js"></script>
+    <script src="~/plugins/summernote/summernote-bs4.min.js"></script>
+    <script src="~/plugins/summernote/summernote.js"></script>
+    <script src="~/plugins/summernote/summernote.min.js"></script>
+    <script src="~/plugins/summernote/summernote-lite.js"></script> *@
+
+    <script>
+               function errorAlert(message) {
+            Swal.fire({
+                icon: 'error',
+                text: message,
+                confirmButtonColor: "#1E403F",
+                timer: 30000,
+            })
         }
-        .admin-sidebar::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.02' fill-rule='evenodd'%3E%3Cpath d='M0 20h40v20H0V20zm20 0h20V0H20v20zM0 0h20v20H0V0z'/%3E%3C/g%3E%3C/svg%3E");
-            pointer-events: none;
+
+        function infoAlert(message) {
+            Swal.fire({
+                icon: 'info',
+                text: message,
+                confirmButtonColor: "#1E403F",
+            })
         }
-        .admin-nav-link {
-            position: relative;
-            border-left: 3px solid transparent;
+
+        function infoAlertWithStyles(message) {
+            Swal.fire({
+                title: 'Notification',
+                icon: 'info',
+                text: message,
+            })
         }
-        .admin-nav-link:hover, .admin-nav-link.active {
-            background: rgba(255,255,255,0.06);
-            border-left-color: #b39359;
+
+        function successAlert(message) {
+            Swal.fire({
+                icon: 'success',
+                text: message,
+                confirmButtonColor: "#1E403F",
+                timer: 30000,
+            })
         }
-        .admin-nav-link:hover .admin-nav-icon {
-            color: #b39359;
+
+        function newErrorAlert(message, url) {
+            Swal.fire({
+                icon: 'error',
+                text: message,
+                confirmButtonColor: "#1E403F",
+            }).then((isConfirm) => {
+                if (isConfirm) {
+                    location.reload(url);
+                }
+            })
         }
-        .admin-gold-line {
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #b39359, transparent);
-            opacity: 0.6;
+
+        function errorAlertWithRedirect(message, url) {
+            Swal.fire({
+                title: "Error",
+                text: message,
+                icon: "error",
+                timer: 30000,
+                confirmButtonColor: "#1E403F",
+                overlay: "background - color: rgba(43, 165, 137, 0.45)",
+            }).then(function () {
+
+                location.href = url;
+            })
         }
-        .admin-main {
-            background: #faf9f7;
-            background-image:
-                radial-gradient(ellipse 120% 80% at 100% 0%, rgba(179,147,89,0.03) 0%, transparent 50%),
-                radial-gradient(ellipse 80% 60% at 0% 100%, rgba(30,64,63,0.04) 0%, transparent 50%);
+
+        function newSuccessAlert(message, url) {
+            Swal({
+                icon: 'success',
+                text: message,
+                confirmButtonColor: "#1E403F",
+            }).then((isConfirm) => {
+                if (isConfirm) {
+                    location.reload(url);
+                }
+            })
         }
-        .admin-brand-img-wrap {
-            flex-shrink: 0;
-            width: 52px;
-            height: 52px;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 2px solid rgba(179,147,89,0.4);
-            background: rgba(255,255,255,0.08);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+
+        function successAlertWithRedirect(message, url) {
+            Swal.fire({
+                title: "Success",
+                text: message,
+                icon: "success",
+                timer: 30000,
+                confirmButtonColor: "#1E403F",
+                overlay: "background - color: rgba(43, 165, 137, 0.45)",
+            }).then(function () {
+
+                location.href = url;
+            })
         }
-        .admin-brand-img-wrap img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            padding: 4px;
+
+        function errorAlertwithTwoButtons(yesUrl, noUrl, newUrl, errorTitle) {
+            Swal.fire({
+                title: errorTitle,
+                text: "",
+                icon: "error",
+                buttons: {
+                    cancle: "No",
+                    confirmButtonColor: "#1E403F",
+                    change: "Yes",
+                    new: "Create Pin",
+                },
+            })
+                .then((status) => {
+                    debugger;
+                    switch (status) {
+                        case "change":
+                            location.href = yesUrl;
+                            break;
+                        case "new":
+                            location.href = newUrl;
+                            break;
+                        default:
+                            location.href = noUrl;
+                    }
+                });
         }
-        .admin-hero-thumb {
-            height: 72px;
-            border-radius: 10px;
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.12);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+
+        function SweeTest(yesUrl, noUrl) {
+            Swal.fire({
+                title: "Unverified E-mail Address",
+                text: "Check your inbox Or Change email",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#1E403F",
+                confirmButtonText: "Resend Email",
+                cancelButtonText: "Change Email",
+                cancelButtonColor: "#D3AF71",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            })
+                .then((result) => {
+                    debugger
+                    if (result.isConfirmed) {
+                        location.href = yesUrl
+                    }
+                    else {
+                        location.href = noUrl
+                    }
+
+                });
         }
-        .admin-hero-thumb img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-    </style>
+    </script>
+
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="~/img/favicon.png">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="~/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/bootstrap-select.css">
+    <link rel="stylesheet" href="~/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/css/jquery-ui.min.css">
+    <link rel="stylesheet" href="~/css/select2.min.css">
+
+    <!-- Fontawesome CSS -->
+    <link rel="stylesheet" href="~/css/font-awesome.min.css">
+    <!-- Lineawesome CSS -->
+    <link rel="stylesheet" href="~/css/line-awesome.min.css">
+
+    <!-- Summernote CSS -->
+    @* <link href="~/plugins/summernote/summernote-bs4.css" rel="stylesheet" />
+    <link href="~/plugins/summernote/summernote.css" rel="stylesheet" />
+    <link href="~/plugins/summernote/summernote-lite.css" rel="stylesheet" /> *@
+    <!-- Select2 CSS -->
+    @*<link rel="stylesheet" href="assets/css/select2.min.css">*@
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true">
 </head>
-<body class="min-h-screen flex antialiased" style="font-family: 'Montserrat', sans-serif;">
-    <!-- Sidebar -->
-    <aside class="admin-sidebar w-64 text-white flex-shrink-0 min-h-screen flex flex-col relative z-10">
-        <!-- Logo, branding & real estate image -->
-        <div class="relative px-5 pt-6 pb-4">
-            <a asp-controller="Admin" asp-action="Index" class="flex items-center gap-4 group">
-                <div class="admin-brand-img-wrap">
-                    <img src="~/images/logo.png" alt="Casa III" asp-append-version="true" />
-                </div>
-                <div class="min-w-0 flex-1">
-                    <span class="block text-xl font-semibold tracking-tight text-white truncate" style="font-family: 'Cormorant Garamond', serif;">Casa III</span>
-                    <span class="block mt-0.5 text-[10px] uppercase tracking-[0.22em] text-white/70 group-hover:text-[#b39359] transition-colors">Realty · Admin</span>
-                </div>
-            </a>
-            <div class="mt-4 admin-hero-thumb">
-                <img src="~/images/banners/banner-1.jpg" alt="" asp-append-version="true" />
+
+<body>
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+        <div class="row m-auto" id="loader" style="z-index:9999; display:none">
+            <div class="">
+                <i class="fa fa-spinner fa-spin text-muted" style="font-size:70px;"></i>
             </div>
         </div>
-        <div class="admin-gold-line mx-5 mb-5 w-12"></div>
 
-        <!-- Navigation -->
-        <nav class="flex-1 px-4 space-y-0.5">
-            <a asp-controller="Admin" asp-action="Index" class="admin-nav-link flex items-center gap-3 px-4 py-3.5 rounded-r-lg text-white/90 transition-all duration-200">
-                <i class="admin-nav-icon fa fa-dashboard fa-fw w-5 text-center text-white/70 transition-colors duration-200"></i>
-                <span class="text-sm font-medium tracking-wide">Dashboard</span>
-            </a>
-            <a asp-controller="Admin" asp-action="Staffs" class="admin-nav-link flex items-center gap-3 px-4 py-3.5 rounded-r-lg text-white/90 transition-all duration-200">
-                <i class="admin-nav-icon fa fa-users fa-fw w-5 text-center text-white/70 transition-colors duration-200"></i>
-                <span class="text-sm font-medium tracking-wide">Staff &amp; Team</span>
-            </a>
-            <a asp-controller="Admin" asp-action="Projects" class="admin-nav-link flex items-center gap-3 px-4 py-3.5 rounded-r-lg text-white/90 transition-all duration-200">
-                <i class="admin-nav-icon fa fa-building fa-fw w-5 text-center text-white/70 transition-colors duration-200"></i>
-                <span class="text-sm font-medium tracking-wide">Projects</span>
-            </a>
-        </nav>
+        <!-- Header -->
+        <div class="header">
 
-        <!-- Footer actions -->
-        <div class="p-4 pt-0">
-            <div class="admin-gold-line mx-4 mb-4 w-8"></div>
-            <a asp-controller="Home" asp-action="Index" class="flex items-center gap-3 px-4 py-3 rounded-r-lg text-white/70 hover:bg-white/5 hover:text-white/90 transition-all text-sm">
-                <i class="fa fa-external-link fa-fw w-5 text-center"></i>
-                <span>Back to site</span>
+            <!-- Logo -->
+
+            <div class="header-left">
+                <a asp-action="Index" asp-controller="Admin" class="logo"><img src="~/images/logo.png" width="40" height="40" alt=""></a>
+            </div>
+            <!-- /Logo -->
+
+            <a id="toggle_btn">
+                <span class="bar-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
             </a>
-            <form asp-controller="Account" asp-action="Logout" method="post" class="block">
-                <button type="submit" class="flex items-center gap-3 px-4 py-3 rounded-r-lg text-white/70 hover:bg-white/5 hover:text-white/90 transition-all w-full text-left text-sm">
-                    <i class="fa fa-sign-out fa-fw w-5 text-center"></i>
-                    <span>Sign out</span>
-                </button>
-            </form>
+
+            <!-- Header Title -->
+            <div class="page-title-box">
+                <h3>CASA III </h3>
+            </div>
+            <!-- /Header Title -->
+
+            <a id="mobile_btn" class="mobile_btn"><i class="fa fa-bars btnYellow"></i></a>
+
+            <!-- Header Menu -->
+            <ul class="nav user-menu">
+
+                <li class="nav-item dropdown has-arrow main-drop">
+                    <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                        <span>@user.FullName</span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="#" class="dropdown-item">My Profile</a>
+                        <a href="#" class="dropdown-item">Settings</a>
+                        <a class="dropdown-item" asp-action="Logout" asp-controller="Account">Logout</a>
+                    </div>
+                </li>
+            </ul>
+            <!-- /Header Menu -->
+            <!-- Mobile Menu -->
+            <div class="dropdown mobile-user-menu">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v btnYellow"></i></a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    @* <a class="dropdown-item" href="#">My Profile</a>
+						<a class="dropdown-item" href="#">Settings</a> *@
+                    <a class="dropdown-item" asp-action="Logout" asp-controller="Account">Logout</a>
+                </div>
+            </div>
+            <!-- /Mobile Menu -->
+
         </div>
-    </aside>
+        <!-- /Header -->
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-inner slimscroll">
+                <div id="sidebar-menu" class="sidebar-menu">
+                    <ul>
+                        <li class="menu-title"> <span>Main</span></li>
+                        <li>
+                            <a asp-action="Index" asp-controller="Admin"><i class="la la-dashboard btnYellow"></i> <span>Dashboard</span></a>
+                        </li>
+                        <li class="menu-title"></li>
+                        <li><a asp-action="Staff" asp-controller="Admin"><i class="la la-users btnYellow"></i> <span>Team Management</span></a></li>
+                        <li class="menu-title"></li>
+                        <li><a asp-action="Projects" asp-controller="Admin"><i class="fa fa-building  btnYellow"></i> <span>Project Management</span></a></li>
+                        <li class="menu-title"></li>
+                        <li><a asp-action="Index" asp-controller="NewsLetter"><i class="fa fa-newspaper-o btnYellow"></i> <span>NewsLetter Mgt</span></a></li>
+                        <li class="menu-title"></li>
+                        <li><a asp-action="Index" asp-controller="Partner"><i class="fa fa-handshake-o btnYellow"></i> <span>Partner Management</span></a></li>
+                        <li class="menu-title"></li>
+                        <li class="submenu">
+                            <a href="#"><i class="la la-key btnYellow"></i> <span> Authentication </span> <span class="menu-arrow"></span></a>
+                            <ul style="display: none;">
+                                <li><a href="#" onclick="popChangePasswordModal()">Change Password</a></li>
+                                <li><a asp-action="Logout" asp-controller="Account">LogOut</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- /Sidebar -->
+        <!-- Page Wrapper -->
+        <div class="page-wrapper">
 
-    <!-- Main content -->
-    <main class="admin-main flex-1 overflow-auto min-h-screen">
-        @RenderBody()
-    </main>
-    <script src="~/js/jquery-3.5.1.min.js"></script>
-    <script>
-        (function() {
-            var path = (window.location.pathname || '').toLowerCase();
-            var links = document.querySelectorAll('.admin-nav-link');
-            links.forEach(function(link) {
-                var href = (link.getAttribute('href') || '').toLowerCase();
-                var isActive = false;
-                if (href.indexOf('/admin/staffs') !== -1) isActive = path.indexOf('/admin/staffs') !== -1;
-                else if (href.indexOf('/admin/projects') !== -1) isActive = path.indexOf('/admin/projects') !== -1;
-                else if (href.indexOf('/admin') !== -1) isActive = path === '/admin' || path === '/admin/' || path === '/admin/index';
-                if (isActive) link.classList.add('active');
-            });
-        })();
-    </script>
-    @RenderSection("Scripts", required: false)
+            <!-- Page Content -->
+            <div class="content container-fluid  bg-gradient-to-br from-slate-50 via-white to-amber-50/30">
+                <main role="main" class="pb-3">
+                    @RenderBody()
+                </main>
+            </div>
+            <!-- /Page Content -->
+            <div class="content container-fluid border-t border-t-[#1E403F]  bg-gradient-to-br from-slate-50 via-white to-amber-50/30">
+                <footer class="footer text-muted">
+                    <div class="container text-center text-[#1E403F]">
+                        <span class="btnYellow text-[#1E403F]">&copy; </span> @year - MTech Global
+                    </div>
+                </footer>
+            </div>
+        </div>
+        <!-- /Page Wrapper -->
+    </div>
+
+    <div class="modal custom-modal fade" id="changePassModal" role="dialog">
+        <div class="modal-dialog modal-md modal-dialog-centered">
+            <div class="modal-content">
+                <button type="button" class="close" data-dismiss="modal"><i class="fa fa-close"></i></button>
+                <div class="modal-body">
+                    <h5 class="modal-title text-center mb-3">Change Password</h5>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Old Passowrd <span class="text-danger">*</span></label>
+                                <input type="password" id="old_password" class="form-control" placeholder="Enter Old Password">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>New Passowrd <span class="text-danger">*</span></label>
+                                <input type="password" id="new_password" class="form-control" placeholder="Enter New Password">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Confirm New Passowrd <span class="text-danger">*</span></label>
+                                <input type="password" id="cnew_password" class="form-control" placeholder="Enter Confirm New Password">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="m-b-20 text-center">
+                    <button class="btn newBtn submit-btn" id="change_pass_btn" onclick="changePassword()">Change Password</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
+
+ @await RenderSectionAsync("Scripts", required: false)
 </html>

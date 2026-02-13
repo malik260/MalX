@@ -1,6 +1,7 @@
 using Core.Model;
 using Core.ViewModels;
 using Logic;
+using Logic.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -14,22 +15,21 @@ namespace CASA3.Controllers
         private readonly SignInManager<AppUser> _signInManager;
         private readonly UserManager<AppUser> _userManager;
         private readonly ILogger<AccountController> _logger;
+        private readonly IAccountService _accountService;
 
-        public AccountController(
-            SignInManager<AppUser> signInManager,
-            UserManager<AppUser> userManager,
-            ILogger<AccountController> logger)
+        public AccountController(SignInManager<AppUser> signInManager,UserManager<AppUser> userManager, ILogger<AccountController> logger, IAccountService accountService)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _logger = logger;
+            _accountService = accountService;
         }
 
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Login(string? returnUrl = null)
         {
-            if (User.Identity?.IsAuthenticated == true)
+            if (User.Identity?.IsAuthenticated == true && Util.GetCurrentUser().Id != null)
                 return Redirect(returnUrl ?? "/Admin");
 
             ViewData["ReturnUrl"] = returnUrl ?? Url.Content("~/Admin");
@@ -60,15 +60,12 @@ namespace CASA3.Controllers
                 return View(model);
             }
 
-            var result = await _signInManager.PasswordSignInAsync(
-                user.UserName!,
-                model.Password,
-                model.RememberMe,
-                lockoutOnFailure: false);
+            var result = await _signInManager.PasswordSignInAsync(user.UserName!,model.Password,model.RememberMe,lockoutOnFailure: false);
 
             if (result.Succeeded)
             {
-                var sessionUser = new { user.Id, user.UserName, user.Email, user.FirstName, user.LastName };
+                var userRoles = await _userManager.GetRolesAsync(user);
+                var sessionUser = new { user.Id, user.UserName, user.Email, user.FirstName, user.LastName, UserRole = userRoles.FirstOrDefault() };
                 var userJson = JsonConvert.SerializeObject(sessionUser);
                 HttpContext.Session.SetString("currentuser", userJson);
                 _logger.LogInformation("User {Email} logged in.", model.Email);
@@ -151,6 +148,14 @@ namespace CASA3.Controllers
             if (statusCode.HasValue)
                 ViewData["StatusCode"] = statusCode.Value;
             return View();
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<JsonResult> ChangePassword(string model)
+        {
+            var response = await _accountService.ChangePasswordService(model);
+            return Json(response);
         }
     }
 }

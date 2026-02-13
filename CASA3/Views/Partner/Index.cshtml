@@ -1,0 +1,305 @@
+﻿@using static Util
+@model IEnumerable<Core.ViewModels.PartnerVM>
+@{
+    Layout = Constants.CMS_Layout;
+    var pageType = "Partner";
+    ViewData["Page-title"] = pageType;
+    ViewData["Title"] = pageType;
+    var user = Util.GetCurrentUser();
+}
+
+<style>
+    body {
+        counter-reset: Serial;
+    }
+
+    tr td:first-child:before {
+        counter-increment: Serial;
+        content: counter(Serial);
+    }
+
+    .partner-logo {
+        max-width: 120px;
+        max-height: 60px;
+        object-fit: contain;
+    }
+
+    .status-badge {
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 11px;
+    }
+</style>
+
+<!-- Page Header -->
+<div class="page-header">
+    <div class="row">
+        <div class="col">
+            <h3 class="page-title">Partner Management</h3>
+        </div>
+        <div class="col-auto float-right ml-auto">
+            <a class="btn add-btn" href="#" data-toggle="modal" data-target="#prt_addModal">
+                <i class="fa fa-plus"></i> Add Partner
+            </a>
+        </div>
+    </div>
+</div>
+<!-- /Page Header -->
+
+<div class="row">
+    <div class="col-md-12">
+        @if (Model != null && Model.Count() > 0)
+        {
+            <div class="table-responsive">
+                <table class="table table-hover custom-table datatable mb-0">
+                    <thead>
+                        <tr>
+                            <th>S/N</th>
+                            <th>Logo</th>
+                            <th>Name</th>
+                            <th>Address</th>
+                            <th>Contact Email</th>
+                            <th>Contact Phone</th>
+                            <th>Display Order</th>
+                            <th>Status</th>
+                            <th>Created By</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td></td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.LogoUrl))
+                                    {
+                                        <img src="/@item.LogoUrl" alt="@item.Name" class="partner-logo">
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">No Logo</span>
+                                    }
+                                </td>
+                                <td><strong>@item.Name</strong></td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.Address))
+                                    {
+                                        @(item.Address.Length > 40 ? item.Address.Substring(0, 40) + "..." : item.Address)
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">-</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.ContactEmail))
+                                    {
+                                        <a href="mailto:@item.ContactEmail">@item.ContactEmail</a>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">-</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.ContactPhone))
+                                    {
+                                        <a href="tel:@item.ContactPhone">@item.ContactPhone</a>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">-</span>
+                                    }
+                                </td>
+                                <td>@item.DisplayOrder</td>
+                                <td>
+                                    @if (item.IsActive)
+                                    {
+                                        <span class="badge badge-success status-badge">Active</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-danger status-badge">Inactive</span>
+                                    }
+                                </td>
+                                <td>@item.CreatedBy</td>
+                                <td class="text-center">
+                                    <div class="dropdown dropdown-action">
+                                        <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                            <i class="material-icons">more_vert</i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <a class="dropdown-item" onclick="TogglePartnerStatus('@item.Id')">
+                                                <i class="fa fa-@(item.IsActive ? "ban" : "check") m-r-5"></i>@(item.IsActive ? "Deactivate" : "Activate")
+                                            </a>
+                                            <a class="dropdown-item" onclick="GetPartnerDetailForEdit('@item.Id')">
+                                                <i class="fa fa-edit m-r-5 text-success"></i>Edit
+                                            </a>
+                                            <a class="dropdown-item" onclick="getDataForDelete('@item.Id')">
+                                                <i class="fa fa-trash-o m-r-5 text-danger"></i>Delete
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="row p-5 m-5">
+                <div class="col-md-12 text-center p-5 m-5">
+                    <h2>No Record Found</h2>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Add Modal -->
+<div class="modal custom-modal fade" id="prt_addModal" role="dialog">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal"><i class="fa fa-close"></i></button>
+            <div class="modal-body">
+                <h5 class="modal-title text-center mb-3">Add Partner</h5>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Partner Name <span class="text-danger">*</span></label>
+                            <input type="text" id="prt_name" class="form-control" placeholder="Enter Partner Name">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Address <small class="text-muted">(Optional)</small></label>
+                            <input type="text" id="prt_address" class="form-control" placeholder="Enter Partner Address">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Contact Email <small class="text-muted">(Optional)</small></label>
+                            <input type="email" id="prt_email" class="form-control" placeholder="Enter Contact Email">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Contact Phone <small class="text-muted">(Optional)</small></label>
+                            <input type="text" id="prt_phone" class="form-control" placeholder="Enter Contact Phone">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Partner Logo <span class="text-danger">*</span></label>
+                            <input type="file" id="prt_logo" class="form-control" accept="image/*">
+                            <small class="text-muted">Max size: 2MB. Recommended: PNG or SVG with transparent background</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="m-t-20 text-center">
+                    <button class="btn newBtn submit-btn" id="prt_add_partner_btn" onclick="CreatePartner()">Add Partner</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal custom-modal fade" id="prt_editModal" role="dialog">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal"><i class="fa fa-close"></i></button>
+            <div class="modal-body">
+                <h5 class="modal-title text-center mb-3">Update Partner</h5>
+                <div class="row">
+                    <input type="text" id="prt_edit_Id" hidden>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Partner Name <span class="text-danger">*</span></label>
+                            <input type="text" id="prt_name_edit" class="form-control" placeholder="Enter Partner Name">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Address <small class="text-muted">(Optional)</small></label>
+                            <input type="text" id="prt_address_edit" class="form-control" placeholder="Enter Partner Address">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Contact Email <small class="text-muted">(Optional)</small></label>
+                            <input type="email" id="prt_email_edit" class="form-control" placeholder="Enter Contact Email">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Contact Phone <small class="text-muted">(Optional)</small></label>
+                            <input type="text" id="prt_phone_edit" class="form-control" placeholder="Enter Contact Phone">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Display Order</label>
+                            <input type="number" id="prt_display_order_edit" class="form-control" value="0" min="0">
+                            <small class="text-muted">Lower numbers appear first</small>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Status</label>
+                            <div class="mt-2">
+                                <label class="custom_check">
+                                    <input type="checkbox" id="prt_is_active_edit" checked>
+                                    <span class="checkmark"></span> Active
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Partner Logo <small class="text-muted">(Leave empty to keep current)</small></label>
+                            <div id="prt_current_logo" class="mb-2"></div>
+                            <input type="file" id="prt_logo_edit" class="form-control" accept="image/*">
+                            <small class="text-muted">Max size: 2MB. Recommended: PNG or SVG with transparent background</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="m-t-20 text-center">
+                    <button class="btn newBtn submit-btn" id="prt_edit_partner_btn" onclick="UpdatePartner()">Update Record</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal custom-modal fade" id="prt_deleteModal" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="form-header">
+                    <input id="prt_delete_Id" hidden />
+                    <h3>Delete Partner</h3>
+                    <p>Are you sure you want to delete this partner?</p>
+                </div>
+                <div class="modal-btn delete-action">
+                    <div class="row">
+                        <div class="col-6">
+                            <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-secondary cancel-btn">Cancel</a>
+                        </div>
+                        <div class="col-6">
+                            <a onclick="DeletePartner()" id="prt_del_partner_btn" class="btn btn-primary continue-btn">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/partner.js"></script>
+}

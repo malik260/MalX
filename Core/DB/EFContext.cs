@@ -20,5 +20,7 @@ namespace Core.DB
         public DbSet<Project> Projects { get; set; }
         public DbSet<BuildingDesign> BuildingDesigns { get; set; }
         public DbSet<Media> Media { get; set; }
+        public DbSet<NewsLetter> NewsLetters { get; set; }
+        public DbSet<Partner> Partners { get; set; }
     }
 }

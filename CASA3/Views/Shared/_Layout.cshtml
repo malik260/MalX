@@ -268,7 +268,7 @@
 
         <!-- Partners -->
         @{
-            var partners = ViewData["Partners"] as List<Core.DTOs.PartnerDto> ?? new List<Core.DTOs.PartnerDto>();
+            var partners = ViewData["Partners"] as List<Core.ViewModels.PartnerVM> ?? new List<Core.ViewModels.PartnerVM>();
         }
         @if (partners.Any())
         {
@@ -284,16 +284,7 @@
                             @foreach (var partner in partners)
                             {
                                 <div class="partner-logo flex items-center justify-center flex-shrink-0 w-32 md:w-40">
-                                    @if (!string.IsNullOrEmpty(partner.WebsiteUrl) && partner.WebsiteUrl != "#")
-                                    {
-                                        <a href="@partner.WebsiteUrl" target="_blank" rel="noopener noreferrer">
-                                            <img src="@partner.ImageUrl" alt="@partner.Name" class="h-12 md:h-16 w-auto object-contain transition-all duration-300 opacity-70 hover:opacity-100">
-                                        </a>
-                                    }
-                                    else
-                                    {
-                                        <img src="@partner.ImageUrl" alt="@partner.Name" class="h-12 md:h-16 w-auto object-contain transition-all duration-300 opacity-70 hover:opacity-100">
-                                    }
+                                    <img src="@partner.LogoUrl" alt="@partner.Name" class="h-12 md:h-16 w-auto object-contain transition-all duration-300 opacity-70 hover:opacity-100">
                                 </div>
                             }
                         }

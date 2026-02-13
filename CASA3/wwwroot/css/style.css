@@ -1337,16 +1337,19 @@ table.dataTable thead > tr > td.sorting {
 	z-index: 1002;
 	color: #10B981;
 }
-.header .header-left {
-	float: left;
-	height: 60px;
-	padding: 0 20px;
-	position: relative;
-	text-align: center;
-	width: 100px;
-	z-index: 1;
-	transition: all 0.2s ease-in-out;
-}
+	.header .header-left {
+		float: left;
+		height: 60px;
+		padding: 0 20px;
+		position: relative;
+		text-align: center;
+		width: 100px;
+		z-index: 1;
+		transition: all 0.2s ease-in-out;
+		display: flex;
+		align-items: center; 
+		height: 100%; 
+	}
 .header .header-left .logo {
 	display: inline-block;
 	line-height: 60px;

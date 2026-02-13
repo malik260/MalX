@@ -1,9 +1,11 @@
 ﻿using Core.Model;
+using Core.ViewModels;
 using Logic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
+using System.ComponentModel;
 using System.Security.Claims;
 using System.Text;
 
@@ -58,18 +60,29 @@ namespace Logic
 
 public class Util
 {
-    public static AppUser GetCurrentUser()
+    public static AppUserVM GetCurrentUser()
     {
-        var loggInUser = new AppUser();
+        var loggInUser = new AppUserVM();
         var userString = AppHttpContext.Current?.Session?.GetString("currentuser");
         if (userString != null)
         {
-            loggInUser = JsonConvert.DeserializeObject<AppUser>(userString);
+            loggInUser = JsonConvert.DeserializeObject<AppUserVM>(userString);
             return loggInUser;
         }
         var userName = AppHttpContext.Current?.User?.Claims?.Where(x => x.Type == ClaimTypes.Name).FirstOrDefault()?.Value;
         loggInUser.UserName = userName;
         return loggInUser;
+    }
+
+
+    public static string GetEnumDescription(Enum enumValue)
+    {
+        var field = enumValue.GetType().GetField(enumValue.ToString());
+        if (Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) is DescriptionAttribute attribute)
+        {
+            return attribute.Description;
+        }
+        return field?.ToString();
     }
 
 
@@ -80,7 +93,7 @@ public class Util
         public static string StaffRole = "Staff";
 
         public static string DefaultLayout = "~/Views/Shared/_Layout.cshtml";
-        public static string CMS_Layout = "~/Views/Shared/_CMS_Layout.cshtml";
+        public static string CMS_Layout = "~/Views/Shared/_AdminLayout.cshtml";
     }
 }
 

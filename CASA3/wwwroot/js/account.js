@@ -1,45 +1,55 @@
-﻿//Login Section
-
-var staffLoginData = {};
-function staffLoginValidtion() {
+﻿var changePasswordData = {};
+function changePassValidtion() {
     inputValidation = [];
-    inputValidation.push(validateEmail('email'));
-    inputValidation.push(validateField('', "password"));
+    inputValidation.push(validateField('', "old_password"));
+    inputValidation.push(validateField('', "new_password"));
+    inputValidation.push(validateField('', "cnew_password"));
     if (inputValidation.includes(false)) {
         return false;
     }
-    staffLoginData.Email = $('#email').val();
-    staffLoginData.Password = $('#password').val();
+    changePasswordData.OldPassword = $('#old_password').val();
+    changePasswordData.NewPassword = $('#new_password').val();
+    changePasswordData.CNewPassword = $('#cnew_password').val();
     return true;
 }
-function staffLogin() {
-    if (staffLoginValidtion()) {
-        processingBtn('staff_login_btn');
-        let loginDetails = JSON.stringify(staffLoginData);
+
+
+function popChangePasswordModal(id) {
+    $('#changePassModal').modal('show');
+}
+
+function changePassword() {
+    if (changePassValidtion()) {
+        if (changePasswordData.CNewPassword !== changePasswordData.NewPassword) {
+            errorAlert("New Password and Confirm Password Not Matched");
+            return false;
+        }
+        processingBtn('change_pass_btn');
+        let details = JSON.stringify(changePasswordData);
         $.ajax({
             type: 'Post',
-            url: "/Account/StaffLogin",
+            url: "/Account/ChangePassword",
             dataType: 'json',
-            data: { model: loginDetails },
+            data: { model: details },
             success: function (result) {
                 if (!result.isError) {
-                    successAlertWithRedirect(result.message, "/Admin");
+                    successAlert(result.message);
+                    returnDefaultBtn('change_pass_btn');
+                    $('#changePassModal').modal('hide');
                 }
                 else {
-                    returnDefaultBtn('staff_login_btn');
+                    returnDefaultBtn('change_pass_btn');
                     errorAlert(result.message);
                 }
             },
             error: function (ex) {
-                returnDefaultBtn('staff_login_btn')
+                returnDefaultBtn('change_pass_btn')
                 errorAlert("Network failure, please try again " + ex);
             }
         });
     }
 }
 
-
-//Login Section Ended
 
 
 

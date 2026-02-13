@@ -5,6 +5,7 @@
     var greeting = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
     var dateStr = DateTime.Now.ToString("dddd, MMMM d, yyyy");
     var total = Model.StaffCount + Model.ProjectCount + Model.VendorCount + Model.AffiliateCount + Model.ContactCount + Model.NewsletterCount;
+    var currentUser = Util.GetCurrentUser();
 }
 
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -13,11 +14,11 @@
     <!-- Subtle grid pattern -->
     <div class="absolute inset-0 opacity-[0.02]" style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%231E403F\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
 
-    <div class="relative p-8 lg:p-12">
+    <div class="relative">
         <!-- Header -->
         <header class="mb-10 lg:mb-14">
             <p class="text-sm font-medium text-[#1E403F]/70 uppercase tracking-widest mb-1" style="font-family: 'DM Sans', sans-serif;">@dateStr</p>
-            <h1 class="text-4xl lg:text-5xl font-bold text-slate-800 tracking-tight" style="font-family: 'Outfit', sans-serif;">@greeting</h1>
+            <h1 class="text-4xl lg:text-5xl font-bold text-slate-800 tracking-tight" style="font-family: 'Outfit', sans-serif;">@greeting @currentUser.FullName</h1>
             <p class="mt-2 text-lg text-slate-500" style="font-family: 'DM Sans', sans-serif;">Here’s what’s happening across your site.</p>
         </header>
 

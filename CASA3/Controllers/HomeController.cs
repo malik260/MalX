@@ -18,8 +18,10 @@ namespace CASA3.Controllers
         private readonly IContactUsService _contactUsService;
         private readonly IStaffService _staffService;
         private readonly IProjectService _projectService;
+        private readonly INewsLetterService _newsLetter;
+        private readonly IPartnerService _partnerService;
 
-        public HomeController(ILogger<HomeController> logger, IVendorService vendorService, IAffiliateService affiliateService, INewsletterSubscriptionService newsletterSubscriptionService, IContactUsService contactUsService, IStaffService staffService, IProjectService projectService)
+        public HomeController(ILogger<HomeController> logger, IVendorService vendorService, IAffiliateService affiliateService, INewsletterSubscriptionService newsletterSubscriptionService, IContactUsService contactUsService, IStaffService staffService, IProjectService projectService, INewsLetterService newsLetter, IPartnerService partnerService)
         {
             _logger = logger;
             _vendorService = vendorService;
@@ -28,6 +30,8 @@ namespace CASA3.Controllers
             _contactUsService = contactUsService;
             _staffService = staffService;
             _projectService = projectService;
+            _newsLetter = newsLetter;
+            _partnerService = partnerService;
         }
 
         public IActionResult Index()
@@ -132,24 +136,7 @@ namespace CASA3.Controllers
             model.SelectedFootprintYear = 2018;
 
             // Newsletters data
-            model.Newsletters = new List<NewsletterDto>
-            {
-                new NewsletterDto
-                {
-                    CoverImageUrl = "/images/Newsletter/Newsletter-Feb.-2026-Cover.jpg-scaled.webp",
-                    PdfUrl = "#" // Replace with actual PDF URL
-                },
-                new NewsletterDto
-                {
-                    CoverImageUrl = "/images/Newsletter/Newsletter-Jan.-2026-Cover-scaled.webp",
-                    PdfUrl = "#" // Replace with actual PDF URL
-                },
-                new NewsletterDto
-                {
-                    CoverImageUrl = "/images/Newsletter/COVER-1_page-0001-scaled.webp",
-                    PdfUrl = "#" // Replace with actual PDF URL
-                }
-            };
+            model.Newsletters = _newsLetter.GetAllNewsLetterService();
 
             // Partners data - Set in ViewData for layout access
             ViewData["Partners"] = GetPartners();
@@ -188,41 +175,9 @@ namespace CASA3.Controllers
             };
         }
 
-        private List<PartnerDto> GetPartners()
+        private List<PartnerVM> GetPartners()
         {
-            return new List<PartnerDto>
-            {
-                new PartnerDto
-                {
-                    Name = "Jaiz Bank",
-                    ImageUrl = "/images/partners/jaiz-1-1.webp",
-                    WebsiteUrl = "#"
-                },
-                new PartnerDto
-                {
-                    Name = "Metropolitan",
-                    ImageUrl = "/images/partners/metro-2.webp",
-                    WebsiteUrl = "#"
-                },
-                new PartnerDto
-                {
-                    Name = "Partner 3",
-                    ImageUrl = "/images/partners/My-project-1-9-1-1.webp",
-                    WebsiteUrl = "#"
-                },
-                new PartnerDto
-                {
-                    Name = "New Edge Bank",
-                    ImageUrl = "/images/partners/117-1-1.webp",
-                    WebsiteUrl = "#"
-                },
-                new PartnerDto
-                {
-                    Name = "Metropolitan",
-                    ImageUrl = "/images/partners/metro-2.webp",
-                    WebsiteUrl = "#"
-                }
-            };
+            return _partnerService.GetAllPartnersService();
         }
 
         public IActionResult AboutUs()
