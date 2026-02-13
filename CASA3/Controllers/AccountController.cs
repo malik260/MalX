@@ -131,7 +131,7 @@ namespace CASA3.Controllers
 
             return View(model);
         }
-
+            
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout(string? returnUrl = null)
