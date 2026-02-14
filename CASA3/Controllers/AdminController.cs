@@ -273,7 +273,10 @@ namespace CASA3.Controllers
                 Slug = dto.Slug,
                 Description = dto.Description,
                 HeroImageUrl = dto.HeroImageUrl,
-                BrochurePdfUrl = dto.BrochurePdfUrl
+                BrochurePdfUrl = dto.BrochurePdfUrl,
+                Year = dto.Year,
+                IsFeatured = dto.IsFeatured,
+                Category = dto.Category
             };
             ViewData["Title"] = "Edit Project";
             ViewData["ProjectId"] = id;
@@ -472,6 +475,254 @@ namespace CASA3.Controllers
             if (!string.IsNullOrEmpty(projectId))
                 return RedirectToAction(nameof(ProjectUnits), new { projectId });
             return RedirectToAction(nameof(Projects));
+        }
+
+        // ───────── Contact Us ─────────
+
+        public IActionResult Contacts()
+        {
+            var list = _contactUsService.GetAllContactUsService();
+            ViewData["Title"] = "Contact Us";
+            return View(list);
+        }
+
+        // ───────── Vendor Management ─────────
+
+        public IActionResult Vendors()
+        {
+            var list = _vendorService.GetAllRegisteredVendorsService();
+            ViewData["Title"] = "Vendor Management";
+            return View(list);
+        }
+
+        [HttpGet]
+        public IActionResult AddVendor()
+        {
+            ViewData["Title"] = "Add Vendor";
+            return View(new VendorRegistrationDto());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddVendor(VendorRegistrationDto model, IFormFile? file)
+        {
+            if (string.IsNullOrWhiteSpace(model.CompanyName) || string.IsNullOrWhiteSpace(model.Email))
+            {
+                ModelState.AddModelError(string.Empty, "Company name and email are required.");
+                return View(model);
+            }
+
+            if (file != null && file.Length > 0)
+            {
+                var uploadsDir = Path.Combine(_env.WebRootPath, "uploads", "vendors");
+                if (!Directory.Exists(uploadsDir))
+                    Directory.CreateDirectory(uploadsDir);
+                var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
+                var fileName = $"{Guid.NewGuid()}{ext}";
+                var filePath = Path.Combine(uploadsDir, fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                    await file.CopyToAsync(stream);
+                model.FilePath = $"/uploads/vendors/{fileName}";
+            }
+
+            var result = await _vendorService.CreateVendorService(model);
+            if (result.success)
+            {
+                TempData["VendorMessage"] = result.Message;
+                return RedirectToAction(nameof(Vendors));
+            }
+            ModelState.AddModelError(string.Empty, result.Message);
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditVendor(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+                return RedirectToAction(nameof(Vendors));
+            var vendor = await _vendorService.GetVendorIdMain(id);
+            if (vendor == null)
+            {
+                TempData["VendorError"] = "Vendor not found.";
+                return RedirectToAction(nameof(Vendors));
+            }
+            var model = new VendorUpdateDto
+            {
+                Id = vendor.Id,
+                CompanyName = vendor.CompanyName,
+                ContactPerson = vendor.ContactPerson,
+                Email = vendor.Email,
+                PhoneNumber = vendor.PhoneNumber,
+                CACNumber = vendor.CACNumber,
+                TIN = vendor.TIN,
+                BusinessCategory = vendor.BusinessCategory,
+                BusinessAddress = vendor.BusinessAddress,
+                FilePath = vendor.FilePath,
+                Status = vendor.Status
+            };
+            ViewData["Title"] = "Edit Vendor";
+            ViewData["VendorId"] = id;
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditVendor(string id, VendorUpdateDto model, IFormFile? file)
+        {
+            if (string.IsNullOrEmpty(id))
+                return RedirectToAction(nameof(Vendors));
+            model.Id = id;
+
+            if (string.IsNullOrWhiteSpace(model.CompanyName) || string.IsNullOrWhiteSpace(model.Email))
+            {
+                ModelState.AddModelError(string.Empty, "Company name and email are required.");
+                ViewData["VendorId"] = id;
+                return View(model);
+            }
+
+            if (file != null && file.Length > 0)
+            {
+                var uploadsDir = Path.Combine(_env.WebRootPath, "uploads", "vendors");
+                if (!Directory.Exists(uploadsDir))
+                    Directory.CreateDirectory(uploadsDir);
+                var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
+                var fileName = $"{Guid.NewGuid()}{ext}";
+                var filePath = Path.Combine(uploadsDir, fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                    await file.CopyToAsync(stream);
+                model.FilePath = $"/uploads/vendors/{fileName}";
+            }
+            else
+            {
+                var current = await _vendorService.GetVendorIdMain(id);
+                if (current != null)
+                    model.FilePath = current.FilePath;
+            }
+
+            var result = await _vendorService.UpdateStudentService(model);
+            if (result.success)
+            {
+                TempData["VendorMessage"] = result.Message;
+                return RedirectToAction(nameof(Vendors));
+            }
+            ModelState.AddModelError(string.Empty, result.Message);
+            ViewData["VendorId"] = id;
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteVendor(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+                return RedirectToAction(nameof(Vendors));
+            var result = await _vendorService.DeleteVendorByIdService(id);
+            TempData["VendorMessage"] = result.Message;
+            return RedirectToAction(nameof(Vendors));
+        }
+
+        // ───────── Affiliate Management ─────────
+
+        public IActionResult Affiliates()
+        {
+            var list = _affiliateService.GetAllRegisteredAffiliatesService();
+            ViewData["Title"] = "Affiliate Management";
+            return View(list);
+        }
+
+        [HttpGet]
+        public IActionResult AddAffiliate()
+        {
+            ViewData["Title"] = "Add Affiliate";
+            return View(new AffiliateRegistrationDto());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddAffiliate(AffiliateRegistrationDto model)
+        {
+            if (string.IsNullOrWhiteSpace(model.FirstName) || string.IsNullOrWhiteSpace(model.LastName) || string.IsNullOrWhiteSpace(model.Email) || string.IsNullOrWhiteSpace(model.Phone))
+            {
+                ModelState.AddModelError(string.Empty, "First name, last name, email and phone are required.");
+                return View(model);
+            }
+
+            var result = await _affiliateService.CreateAffiliateService(model);
+            if (result.success)
+            {
+                TempData["AffiliateMessage"] = result.Message;
+                return RedirectToAction(nameof(Affiliates));
+            }
+            ModelState.AddModelError(string.Empty, result.Message);
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditAffiliate(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+                return RedirectToAction(nameof(Affiliates));
+            var affiliate = await _affiliateService.GetAffiliateIdMain(id);
+            if (affiliate == null)
+            {
+                TempData["AffiliateError"] = "Affiliate not found.";
+                return RedirectToAction(nameof(Affiliates));
+            }
+            var model = new AffiliateUpdateDto
+            {
+                Id = affiliate.Id,
+                FirstName = affiliate.FirstName,
+                LastName = affiliate.LastName,
+                Email = affiliate.Email,
+                Phone = affiliate.Phone,
+                StreetAddress = affiliate.StreetAddress,
+                StateProvince = affiliate.StateProvince,
+                Country = affiliate.Country,
+                AccountName = affiliate.AccountName,
+                BankName = affiliate.BankName,
+                AccountNumber = affiliate.AccountNumber,
+                Status = affiliate.Status
+            };
+            ViewData["Title"] = "Edit Affiliate";
+            ViewData["AffiliateId"] = id;
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditAffiliate(string id, AffiliateUpdateDto model)
+        {
+            if (string.IsNullOrEmpty(id))
+                return RedirectToAction(nameof(Affiliates));
+            model.Id = id;
+
+            if (string.IsNullOrWhiteSpace(model.FirstName) || string.IsNullOrWhiteSpace(model.LastName) || string.IsNullOrWhiteSpace(model.Email) || string.IsNullOrWhiteSpace(model.Phone))
+            {
+                ModelState.AddModelError(string.Empty, "First name, last name, email and phone are required.");
+                ViewData["AffiliateId"] = id;
+                return View(model);
+            }
+
+            var result = await _affiliateService.UpdateStudentService(model);
+            if (result.success)
+            {
+                TempData["AffiliateMessage"] = result.Message;
+                return RedirectToAction(nameof(Affiliates));
+            }
+            ModelState.AddModelError(string.Empty, result.Message);
+            ViewData["AffiliateId"] = id;
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteAffiliate(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+                return RedirectToAction(nameof(Affiliates));
+            var result = await _affiliateService.DeleteAffiliateByIdService(id);
+            TempData["AffiliateMessage"] = result.Message;
+            return RedirectToAction(nameof(Affiliates));
         }
 
         /// <summary>

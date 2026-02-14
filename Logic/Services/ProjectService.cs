@@ -37,7 +37,10 @@ namespace Logic.Services
                     Slug = string.IsNullOrWhiteSpace(dto.Slug) ? null : dto.Slug.Trim(),
                     Description = string.IsNullOrWhiteSpace(dto.Description) ? null : dto.Description.Trim(),
                     HeroImageUrl = string.IsNullOrWhiteSpace(dto.HeroImageUrl) ? null : dto.HeroImageUrl.Trim(),
-                    BrochurePdfUrl = string.IsNullOrWhiteSpace(dto.BrochurePdfUrl) ? null : dto.BrochurePdfUrl.Trim()
+                    BrochurePdfUrl = string.IsNullOrWhiteSpace(dto.BrochurePdfUrl) ? null : dto.BrochurePdfUrl.Trim(),
+                    Year = dto.Year,
+                    IsFeatured = dto.IsFeatured,
+                    Category = dto.Category
                 };
 
                 await _context.Projects.AddAsync(project).ConfigureAwait(false);
@@ -115,6 +118,9 @@ namespace Logic.Services
                 project.Description = string.IsNullOrWhiteSpace(dto.Description) ? null : dto.Description.Trim();
                 project.HeroImageUrl = string.IsNullOrWhiteSpace(dto.HeroImageUrl) ? null : dto.HeroImageUrl.Trim();
                 project.BrochurePdfUrl = string.IsNullOrWhiteSpace(dto.BrochurePdfUrl) ? null : dto.BrochurePdfUrl.Trim();
+                project.Year = dto.Year;
+                project.IsFeatured = dto.IsFeatured;
+                project.Category = dto.Category;
                 project.UpdatedAt = DateTime.UtcNow;
 
                 await _context.SaveChangesAsync().ConfigureAwait(false);
@@ -356,7 +362,10 @@ namespace Logic.Services
                 Slug = p.Slug,
                 Description = p.Description,
                 HeroImageUrl = p.HeroImageUrl,
-                BrochurePdfUrl = p.BrochurePdfUrl
+                BrochurePdfUrl = p.BrochurePdfUrl,
+                Year = p.Year,
+                IsFeatured = p.IsFeatured,
+                Category = p.Category
             };
         }
 

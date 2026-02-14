@@ -1,3 +1,5 @@
+using Core.Enum;
+
 namespace Core.Model
 {
     public class Project : BaseModel
@@ -8,6 +10,9 @@ namespace Core.Model
         public string? Description { get; set; }
         public string? HeroImageUrl { get; set; }
         public string? BrochurePdfUrl { get; set; }
+        public int? Year { get; set; }
+        public bool IsFeatured { get; set; }
+        public ProjectCategory? Category { get; set; }
         public virtual ICollection<BuildingDesign> BuildingDesigns { get; set; } = new List<BuildingDesign>();
     }
 }
