@@ -1,31 +1,72 @@
 @model Core.DTOs.BlogPostDto
-
 @{
     ViewData["Title"] = Model?.Title ?? "Blog Details";
+    var blogId = ViewData["BlogId"] as string;
 }
-
 <section class="bg-white py-12">
-    <div class="max-w-4xl mx-auto px-6">
+    <div class="max-w-7xl mx-auto px-6">
         <a href="@Url.Action("Blog", "Home")" class="text-sm text-gray-600 hover:text-gray-800">← Back to Blog</a>
-
         <h1 class="text-4xl font-bold mt-6 mb-2" style="color: #4A4A4A;">@Model.Title</h1>
         <p class="text-sm text-gray-500 mb-6">@Model.PublishedDate.ToString("MMMM dd, yyyy") &middot; <span class="font-semibold">@Model.Author</span> &middot; <span style="color:#b39359;">@Model.Category</span></p>
-
         @if (!string.IsNullOrEmpty(Model.CoverImageUrl))
         {
             <div class="mb-6 overflow-hidden rounded-lg shadow-md">
                 <img src="@Model.CoverImageUrl" alt="@Model.Title" class="w-full h-auto object-cover" onerror="this.src='/images/projects/project-1.webp'" />
             </div>
         }
-
         <div class="prose max-w-none text-gray-700 mb-8">
-            <p>@Model.Content</p>
-            <p>@Model.Content</p>
-            <p>@Model.Content</p>
+            @Html.Raw(Model.Content)
         </div>
-
         <div class="mt-8">
             <span class="text-sm text-gray-500">Views: @Model.Views</span>
         </div>
     </div>
 </section>
+
+@if (!string.IsNullOrEmpty(blogId))
+{
+    @Html.AntiForgeryToken()
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get system name (computer name)
+            var systemName = '';
+            try {
+                // Try to get computer name from various sources
+                if (navigator.userAgentData && navigator.userAgentData.platform) {
+                    systemName = navigator.userAgentData.platform;
+                } else if (navigator.platform) {
+                    systemName = navigator.platform;
+                } else {
+                    systemName = navigator.userAgent;
+                }
+
+                // Try to get hostname if available
+                if (window.location.hostname) {
+                    systemName = window.location.hostname + ' - ' + systemName;
+                }
+            } catch (e) {
+                systemName = 'Unknown System';
+            }
+
+            // Get anti-forgery token
+            var token = document.querySelector('input[name="__RequestVerificationToken"]')?.value || '';
+
+            // Track blog view
+            fetch('@Url.Action("TrackBlogView", "Home")', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'RequestVerificationToken': token
+                },
+                body: 'blogId=@blogId&systemName=' + encodeURIComponent(systemName) + '&__RequestVerificationToken=' + encodeURIComponent(token)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('View tracked:', data);
+            })
+            .catch(function(error) {
+                console.log('View tracking failed:', error);
+            });
+        });
+    </script>
+}

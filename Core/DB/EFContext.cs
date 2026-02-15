@@ -24,5 +24,7 @@ namespace Core.DB
         public DbSet<NewsLetter> NewsLetters { get; set; }
         public DbSet<Partner> Partners { get; set; }
         public DbSet<Carousel> Carousels { get; set; }
+        public DbSet<Blog> Blogs { get; set; }
+        public DbSet<BlogView> BlogViews { get; set; }
     }
 }

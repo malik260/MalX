@@ -47,6 +47,7 @@ internal class Program
         builder.Services.AddScoped<IAccountService, AccountService>();
         builder.Services.AddScoped<INewsLetterService, NewsLetterService>();
         builder.Services.AddScoped<IPartnerService, PartnerService>();
+        builder.Services.AddScoped<IBlogService, BlogService>();
         builder.Services.AddScoped<ICarouselService, CarouselService>();
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddSession(options =>
