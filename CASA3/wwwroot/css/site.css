@@ -79,3 +79,221 @@
         background-color: #2d2d2d;
         color: white;
     }
+
+/* ==================== SCROLL EFFECTS ANIMATIONS ==================== */
+
+/* Base styles for scroll animations - elements start hidden */
+.scroll-fade-in,
+.scroll-fade-in-up,
+.scroll-fade-in-down,
+.scroll-fade-in-left,
+.scroll-fade-in-right,
+.scroll-slide-up,
+.scroll-slide-down,
+.scroll-slide-left,
+.scroll-slide-right,
+.scroll-scale-in,
+.scroll-scale-up,
+.scroll-rotate-in,
+.scroll-fade-scale,
+.scroll-fade-slide-up {
+    opacity: 0;
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+/* Fade In */
+.scroll-fade-in {
+    opacity: 0;
+}
+.scroll-fade-in.scroll-animated {
+    opacity: 1;
+}
+
+/* Fade In Up */
+.scroll-fade-in-up {
+    opacity: 0;
+    transform: translateY(30px);
+}
+.scroll-fade-in-up.scroll-animated {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Fade In Down */
+.scroll-fade-in-down {
+    opacity: 0;
+    transform: translateY(-30px);
+}
+.scroll-fade-in-down.scroll-animated {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Fade In Left */
+.scroll-fade-in-left {
+    opacity: 0;
+    transform: translateX(-30px);
+}
+.scroll-fade-in-left.scroll-animated {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Fade In Right */
+.scroll-fade-in-right {
+    opacity: 0;
+    transform: translateX(30px);
+}
+.scroll-fade-in-right.scroll-animated {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Slide Up */
+.scroll-slide-up {
+    transform: translateY(50px);
+}
+.scroll-slide-up.scroll-animated {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* Slide Down */
+.scroll-slide-down {
+    transform: translateY(-50px);
+}
+.scroll-slide-down.scroll-animated {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* Slide Left */
+.scroll-slide-left {
+    transform: translateX(50px);
+}
+.scroll-slide-left.scroll-animated {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+/* Slide Right */
+.scroll-slide-right {
+    transform: translateX(-50px);
+}
+.scroll-slide-right.scroll-animated {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+/* Scale In */
+.scroll-scale-in {
+    opacity: 0;
+    transform: scale(0.8);
+}
+.scroll-scale-in.scroll-animated {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Scale Up */
+.scroll-scale-up {
+    opacity: 0;
+    transform: scale(0.9);
+}
+.scroll-scale-up.scroll-animated {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Rotate In */
+.scroll-rotate-in {
+    opacity: 0;
+    transform: rotate(-10deg) scale(0.9);
+}
+.scroll-rotate-in.scroll-animated {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+}
+
+/* Fade Scale */
+.scroll-fade-scale {
+    opacity: 0;
+    transform: scale(0.9);
+}
+.scroll-fade-scale.scroll-animated {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Fade Slide Up */
+.scroll-fade-slide-up {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+}
+.scroll-fade-slide-up.scroll-animated {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+/* Stagger Container */
+.scroll-stagger > * {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.scroll-stagger > *.scroll-animated {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Performance optimizations */
+.scroll-fade-in,
+.scroll-fade-in-up,
+.scroll-fade-in-down,
+.scroll-fade-in-left,
+.scroll-fade-in-right,
+.scroll-slide-up,
+.scroll-slide-down,
+.scroll-slide-left,
+.scroll-slide-right,
+.scroll-scale-in,
+.scroll-scale-up,
+.scroll-rotate-in,
+.scroll-fade-scale,
+.scroll-fade-slide-up {
+    will-change: opacity, transform;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+    .scroll-fade-in,
+    .scroll-fade-in-up,
+    .scroll-fade-in-down,
+    .scroll-fade-in-left,
+    .scroll-fade-in-right,
+    .scroll-slide-up,
+    .scroll-slide-down,
+    .scroll-slide-left,
+    .scroll-slide-right,
+    .scroll-scale-in,
+    .scroll-scale-up,
+    .scroll-rotate-in,
+    .scroll-fade-scale,
+    .scroll-fade-slide-up {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+}
+
+/* Smooth scrolling for the entire page */
+html {
+    scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+}

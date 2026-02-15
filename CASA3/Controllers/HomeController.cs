@@ -5,6 +5,7 @@ using Core.ViewModels;
 using Logic.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using System.Diagnostics;
 
 namespace CASA3.Controllers
@@ -22,8 +23,9 @@ namespace CASA3.Controllers
         private readonly IPartnerService _partnerService;
         private readonly ICarouselService _carouselService;
         private readonly IBlogService _blogService;
+        private readonly IMemoryCache _cache;
 
-        public HomeController(ILogger<HomeController> logger, IVendorService vendorService, IAffiliateService affiliateService, INewsletterSubscriptionService newsletterSubscriptionService, IContactUsService contactUsService, IStaffService staffService, IProjectService projectService, INewsLetterService newsLetter, IPartnerService partnerService, ICarouselService carouselService, IBlogService blogService)
+        public HomeController(ILogger<HomeController> logger, IVendorService vendorService, IAffiliateService affiliateService, INewsletterSubscriptionService newsletterSubscriptionService, IContactUsService contactUsService, IStaffService staffService, IProjectService projectService, INewsLetterService newsLetter, IPartnerService partnerService, ICarouselService carouselService, IBlogService blogService, IMemoryCache cache)
         {
             _logger = logger;
             _vendorService = vendorService;
@@ -36,20 +38,41 @@ namespace CASA3.Controllers
             _partnerService = partnerService;
             _carouselService = carouselService;
             _blogService = blogService;
+            _cache = cache;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var model = new HomePageVM();
-            model.Banner = _carouselService.GetAllCarouselsService().Where(x => x.PageType == CarouselPageType.Home && x.IsActive).ToList();
+
+            // Cache banners - they load instantly from cache after first load
+            model.Banner = _cache.GetOrCreate("HomeBanner", entry =>
+            {
+                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(15);
+                var banners = _carouselService.GetAllCarouselsService()
+                    .Where(x => x.PageType == CarouselPageType.Home && x.IsActive)
+                    .ToList();
+
+                _logger.LogInformation("Loaded {Count} home banners", banners.Count);
+                return banners;
+            });
+
+            // Load projects from cache (already implemented)
+            var allProjects = GetProjects();
+
+            // Load newsletters from cache
+            model.Newsletters = _cache.GetOrCreate("Newsletters", entry =>
+            {
+                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10);
+                return _newsLetter.GetAllNewsLetterService();
+            });
 
             // Featured Projects data
-            model.FeaturedProjects = _projectService.GetAllProjects().Where(p=>p.IsFeatured).ToList();
+            model.FeaturedProjects = allProjects.Where(p => p.IsFeatured).ToList();
 
-            // CASA III Footprint data - Fetch from database and group by year
-            var allProjects = _projectService.GetAllProjects();
+            // CASA III Footprint data
             var projectsWithYear = allProjects.Where(p => p.Year.HasValue).ToList();
-            
+
             model.FootprintYears = projectsWithYear
                 .GroupBy(p => p.Year!.Value)
                 .OrderByDescending(g => g.Key)
@@ -62,39 +85,96 @@ namespace CASA3.Controllers
                         Title = p.Name,
                         Subtitle = p.Slug ?? string.Empty,
                         ImageUrl = p.HeroImageUrl,
-                        Url = $"/projects/{p.Id}" 
+                        Url = $"/projects/{p.Id}"
                     }).ToList()
                 })
                 .ToList();
-            
-            // Set selected year to the most recent year, or default to 2018 if no projects
-            model.SelectedFootprintYear = model.FootprintYears.Any() 
-                ? model.FootprintYears.First().Year 
+
+            model.SelectedFootprintYear = model.FootprintYears.Any()
+                ? model.FootprintYears.First().Year
                 : DateTime.Now.Year;
-
-            // Newsletters data
-            model.Newsletters = _newsLetter.GetAllNewsLetterService();
-
-            // Partners data - Set in ViewData for layout access
-            ViewData["Partners"] = GetPartners();
-            
-            // Projects data for navigation dropdown - Set in ViewData for layout access
-            ViewData["Projects"] = GetProjects();
 
             return View(model);
         }
 
         private List<ProjectDto> GetProjects()
         {
-            var fromDb = _projectService.GetAllProjects();
-            if (fromDb != null && fromDb.Any())
-                return fromDb;
-            return new List<ProjectDto>();
+            try
+            {
+                return _cache.GetOrCreate("Projects", entry =>
+                {
+                    entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30);
+                    var projects = _projectService.GetAllProjects();
+                    
+                    // Log if empty to help debug
+                    if (projects == null || !projects.Any())
+                    {
+                        _logger.LogWarning("GetProjects: No projects returned from service");
+                    }
+                    else
+                    {
+                        _logger.LogInformation("GetProjects: Retrieved {Count} projects from service", projects.Count);
+                    }
+                    
+                    return projects ?? new List<ProjectDto>();
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetProjects: Error retrieving projects");
+                // Try to get fresh data without cache
+                try
+                {
+                    var projects = _projectService.GetAllProjects();
+                    return projects ?? new List<ProjectDto>();
+                }
+                catch
+                {
+                    return new List<ProjectDto>();
+                }
+            }
         }
 
         private List<PartnerVM> GetPartners()
         {
-            return _partnerService.GetAllPartnersService();
+            try
+            {
+                return _cache.GetOrCreate("Partners", entry =>
+                {
+                    entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1);
+                    var allPartners = _partnerService.GetAllPartnersService();
+                    
+                    // Filter to only show active partners for public display
+                    var activePartners = allPartners?.Where(p => p.IsActive).ToList() ?? new List<PartnerVM>();
+                    
+                    // Log if empty to help debug
+                    if (activePartners == null || !activePartners.Any())
+                    {
+                        _logger.LogWarning("GetPartners: No active partners found. Total partners from service: {Count}", 
+                            allPartners?.Count ?? 0);
+                    }
+                    else
+                    {
+                        _logger.LogInformation("GetPartners: Retrieved {Count} active partners from service", activePartners.Count);
+                    }
+                    
+                    return activePartners;
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetPartners: Error retrieving partners");
+                // Try to get fresh data without cache
+                try
+                {
+                    var allPartners = _partnerService.GetAllPartnersService();
+                    return allPartners?.Where(p => p.IsActive).ToList() ?? new List<PartnerVM>();
+                }
+                catch
+                {
+                    return new List<PartnerVM>();
+                }
+            }
         }
 
         public IActionResult AboutUs()
@@ -102,20 +182,11 @@ namespace CASA3.Controllers
             var model = new HomePageVM();
 
             var teamMembers = _staffService.GetAllStaffAsTeamMembers();
-            // Board of Directors
             model.BoardOfDirectors = teamMembers.Where(tm => tm.Category == TeamMemeberCategory.BOD).ToList();
-
-            // Management Team data
             model.ManagementTeam = teamMembers.Where(tm => tm.Category == TeamMemeberCategory.MGT).ToList();
 
-            // Partners data - Set in ViewData for layout access
-            ViewData["Partners"] = GetPartners();
-            
-            // Projects data for navigation dropdown - Set in ViewData for layout access
-            ViewData["Projects"] = GetProjects();
-            
             ViewData["Title"] = "About Us";
-            
+
             return View(model);
         }
 
@@ -131,14 +202,7 @@ namespace CASA3.Controllers
 
         public IActionResult ContactUs()
         {
-            // Partners data - Set in ViewData for layout access
-            ViewData["Partners"] = GetPartners();
-
-            // Projects data for navigation dropdown - Set in ViewData for layout access
-            ViewData["Projects"] = GetProjects();
-
-            ViewData["Title"] = "About Us";
-
+            ViewData["Title"] = "Contact Us";
             return View();
         }
 
@@ -199,18 +263,22 @@ namespace CASA3.Controllers
         {
             var model = new HomePageVM();
 
-            // Fetch published blogs from database
-            var allBlogs = _blogService.GetAllBlogsService()
-                .Where(b => b.IsPublished)
-                .OrderByDescending(b => b.PublishedDate ?? b.CreatedAt)
-                .ToList();
+            // Get cached or fresh blog data
+            var allBlogs = _cache.GetOrCreate("PublishedBlogs", entry =>
+            {
+                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5);
+                return _blogService.GetAllBlogsService()
+                    .Where(b => b.IsPublished)
+                    .OrderByDescending(b => b.PublishedDate ?? b.CreatedAt)
+                    .ToList();
+            });
 
             // Convert BlogVM to BlogPostDto
             var allBlogPosts = allBlogs.Select((blog, index) => new BlogPostDto
             {
-                Id = index + 1, // Sequential ID for display purposes (view uses this for display)
+                Id = index + 1,
                 Title = blog.Title,
-                Slug = blog.Slug ?? blog.Id, // Use slug if available, otherwise use blog ID for navigation
+                Slug = blog.Slug ?? blog.Id,
                 Category = blog.Category ?? string.Empty,
                 PublishedDate = blog.PublishedDate ?? blog.CreatedAt,
                 Content = blog.Content,
@@ -220,7 +288,6 @@ namespace CASA3.Controllers
                 Views = blog.Views
             }).ToList();
 
-            // Store blog IDs mapping (sequential display ID -> actual blog ID) for BlogDetails
             var blogIdMapping = allBlogPosts
                 .Select((post, idx) => new { DisplayId = post.Id, BlogId = allBlogs[idx].Id })
                 .ToDictionary(x => x.DisplayId, x => x.BlogId);
@@ -242,7 +309,6 @@ namespace CASA3.Controllers
             int totalItems = filteredPosts.Count;
             int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
 
-            // Validate page number
             if (page < 1) page = 1;
             if (page > totalPages && totalPages > 0) page = totalPages;
 
@@ -254,13 +320,17 @@ namespace CASA3.Controllers
                 SearchQuery = search ?? ""
             };
 
-            // Apply pagination using Skip and Take
-            model.BlogPosts = filteredPosts.OrderByDescending(b => b.PublishedDate).Skip(model.Pagination.SkipCount).Take(pageSize).ToList();
+            model.BlogPosts = filteredPosts
+                .OrderByDescending(b => b.PublishedDate)
+                .Skip(model.Pagination.SkipCount)
+                .Take(pageSize)
+                .ToList();
 
-            // Recent posts - Get the 3 most recent from all posts (not filtered)
-            model.RecentBlogPosts = allBlogPosts.OrderByDescending(b => b.PublishedDate).Take(3).ToList();
+            model.RecentBlogPosts = allBlogPosts
+                .OrderByDescending(b => b.PublishedDate)
+                .Take(3)
+                .ToList();
 
-            // Check if this is an AJAX request
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
                 return Json(new
@@ -278,28 +348,14 @@ namespace CASA3.Controllers
                 });
             }
 
-            // Partners data - Set in ViewData for layout access
-            ViewData["Partners"] = GetPartners();
-
-            // Projects data for navigation dropdown - Set in ViewData for layout access
-            ViewData["Projects"] = GetProjects();
-
             ViewData["Title"] = "Blog";
-
             return View(model);
         }
 
+        [ResponseCache(Duration = 300, Location = ResponseCacheLocation.Any)]
         public IActionResult OurProject()
         {
-            // Get all projects from database
-            var model = _projectService.GetAllProjects();
-
-            // Partners data - Set in ViewData for layout access
-            ViewData["Partners"] = GetPartners();
-            
-            // Projects data for navigation dropdown - Set in ViewData for layout access
-            ViewData["Projects"] = GetProjects();
-
+            var model = GetProjects();
             return View(model);
         }
 
@@ -310,12 +366,6 @@ namespace CASA3.Controllers
 
         public IActionResult BecomeAnAffiliate()
         {
-            // Partners data - Set in ViewData for layout access
-            ViewData["Partners"] = GetPartners();
-
-            // Projects data for navigation dropdown - Set in ViewData for layout access
-            ViewData["Projects"] = GetProjects();
-
             return View("BecomeAnAffiliate");
         }
 
@@ -393,9 +443,6 @@ namespace CASA3.Controllers
                 Views = blog.Views
             };
 
-            // Partners and projects for layout
-            ViewData["Partners"] = GetPartners();
-            ViewData["Projects"] = GetProjects();
             ViewData["Title"] = post.Title;
             ViewData["BlogId"] = blog.Id; // Pass blog ID for tracking
 
@@ -403,20 +450,31 @@ namespace CASA3.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous] // Add this attribute
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> TrackBlogView(string blogId, string? systemName)
+        [AllowAnonymous]
+        [IgnoreAntiforgeryToken]
+        public IActionResult TrackBlogView(string blogId, string? systemName)
         {
             if (string.IsNullOrEmpty(blogId))
             {
                 return Json(new { success = false, message = "Blog ID is required" });
             }
 
-            // Get client IP address
             var ipAddress = GetClientIpAddress();
-            var result = await _blogService.TrackBlogViewAsync(blogId, ipAddress, systemName);
 
-            return Json(result);
+            // Fire and forget - don't wait for tracking to complete
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await _blogService.TrackBlogViewAsync(blogId, ipAddress, systemName);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Failed to track blog view for blog ID: {BlogId}", blogId);
+                }
+            });
+
+            return Json(new { success = true, message = "Tracking initiated" });
         }
 
         private string? GetClientIpAddress()
@@ -459,8 +517,6 @@ namespace CASA3.Controllers
             if (project == null)
                 return NotFound();
 
-            ViewData["Partners"] = GetPartners();
-            ViewData["Projects"] = GetProjects();
             ViewData["Title"] = project.Name;
             return View(project);
         }
@@ -469,12 +525,15 @@ namespace CASA3.Controllers
         public IActionResult BecomeAVendor()
         {
             var model = new HomePageVM();
-            model.Banner = _carouselService.GetAllCarouselsService().Where(x => x.PageType == CarouselPageType.Vendor && x.IsActive).ToList();
-            // Partners data - Set in ViewData for layout access
-            ViewData["Partners"] = GetPartners();
 
-            // Projects data for navigation dropdown - Set in ViewData for layout access
-            ViewData["Projects"] = GetProjects();
+            // Cache carousel data
+            model.Banner = _cache.GetOrCreate("VendorCarousel", entry =>
+            {
+                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(15);
+                return _carouselService.GetAllCarouselsService()
+                    .Where(x => x.PageType == CarouselPageType.Vendor && x.IsActive)
+                    .ToList();
+            });
 
             return View(model);
         }

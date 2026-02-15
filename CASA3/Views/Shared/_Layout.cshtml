@@ -135,9 +135,6 @@
 <body class="flex flex-col min-h-screen text-gray-800">
 
     <!-- ================= HEADER ================= -->
-    @{
-        var projects = ViewData["Projects"] as List<Core.DTOs.ProjectDto> ?? new List<Core.DTOs.ProjectDto>();
-    }
     <header class="bg-white border-b sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between items-center h-16">
@@ -159,12 +156,7 @@
                         <!-- Invisible padding area to prevent dropdown from closing -->
                         <div class="absolute left-0 top-full w-full h-2"></div>
                         <div class="absolute left-0 top-full pt-2 w-56 bg-white shadow-xl border border-gray-200 rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 max-h-96 overflow-y-auto z-50">
-                            @foreach (var project in projects)
-                            {
-                                <a asp-controller="Home" asp-action="ProjectDetails" asp-route-id="@project.Id" class="block px-5 py-3.5 text-gray-700 hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-b-0 first:rounded-t-lg last:rounded-b-lg">
-                                    @project.Name
-                                </a>
-                            }
+                            @await Component.InvokeAsync("Navigation")
                         </div>
                     </div>
 
@@ -189,10 +181,7 @@
                 <details>
                     <summary class="cursor-pointer text-gray-800">Our Projects</summary>
                     <div class="ml-4 mt-2 space-y-2">
-                        @foreach (var project in projects)
-                        {
-                            <a asp-controller="Home" asp-action="ProjectDetails" asp-route-id="@project.Id" class="block text-gray-800">@project.Name</a>
-                        }
+                        @await Component.InvokeAsync("Navigation")
                     </div>
                 </details>
                 <a asp-controller="Home" asp-action="ContactUs" class="block text-gray-800">Contact Us</a>
@@ -264,31 +253,7 @@
         </section>
 
         <!-- Partners -->
-        @{
-            var partners = ViewData["Partners"] as List<Core.ViewModels.PartnerVM> ?? new List<Core.ViewModels.PartnerVM>();
-        }
-        @if (partners.Any())
-        {
-            <div class="bg-white py-12 overflow-hidden">
-                <h3 class="text-center text-2xl md:text-3xl font-bold text-gray-800 mb-12">Our Partners</h3>
-
-                <!-- Slider Container -->
-                <div class="relative w-full overflow-hidden">
-                    <div id="partnersSlider" class="flex items-center justify-center gap-12 md:gap-16 lg:gap-20" data-partners-count="@partners.Count">
-                        <!-- Partner Logos - Multiple sets for seamless infinite loop -->
-                        @for (int i = 0; i < 3; i++)
-                        {
-                            @foreach (var partner in partners)
-                            {
-                                <div class="partner-logo flex items-center justify-center flex-shrink-0 w-32 md:w-40">
-                                    <img src="/@partner.LogoUrl" alt="@partner.Name" class="h-12 md:h-16 w-auto object-contain transition-all duration-300 opacity-70 hover:opacity-100">
-                                </div>
-                            }
-                        }
-                    </div>
-                </div>
-            </div>
-        }
+        @await Component.InvokeAsync("Partners")
 
         <!-- Bottom Bar -->
         <div class="bg-gray-200 py-6">
@@ -476,6 +441,7 @@
     <script src="~/js/jquery-3.5.1.min.js"></script>
     <script src="~/js/common.js"></script>
     <script src="~/js/site.js"></script>
+    <script src="~/js/scroll-effects.js" asp-append-version="true"></script>
 
     @RenderSection("Scripts", required: false)
 </body>

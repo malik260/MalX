@@ -1,0 +1,25 @@
+@model List<Core.ViewModels.PartnerVM>
+
+@if (Model != null && Model.Any())
+{
+    <div class="bg-white py-12 overflow-hidden">
+        <h3 class="text-center text-2xl md:text-3xl font-bold text-gray-800 mb-12">Our Partners</h3>
+
+        <!-- Slider Container -->
+        <div class="relative w-full overflow-hidden">
+            <div id="partnersSlider" class="flex items-center justify-center gap-12 md:gap-16 lg:gap-20" data-partners-count="@Model.Count">
+                <!-- Partner Logos - Multiple sets for seamless infinite loop -->
+                @for (int i = 0; i < 3; i++)
+                {
+                    @foreach (var partner in Model)
+                    {
+                        <div class="partner-logo flex items-center justify-center flex-shrink-0 w-32 md:w-40">
+                            <img src="/@partner.LogoUrl" alt="@partner.Name" class="h-12 md:h-16 w-auto object-contain transition-all duration-300 opacity-70 hover:opacity-100">
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+}
+

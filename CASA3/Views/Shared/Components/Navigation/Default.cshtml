@@ -1,0 +1,12 @@
+@model List<Core.DTOs.ProjectDto>
+
+@if (Model != null && Model.Any())
+{
+    @foreach (var project in Model)
+    {
+        <a asp-controller="Home" asp-action="ProjectDetails" asp-route-id="@project.Id" class="block px-5 py-3.5 text-gray-700 hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-b-0 first:rounded-t-lg last:rounded-b-lg md:block text-gray-800 md:text-gray-700">
+            @project.Name
+        </a>
+    }
+}
+
