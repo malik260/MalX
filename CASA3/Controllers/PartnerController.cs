@@ -1,4 +1,4 @@
-﻿using Core.DTOs;
+using Core.DTOs;
 using Logic.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,12 +9,12 @@ namespace CASA3.Controllers
     public class PartnerController : Controller
     {
         private readonly IPartnerService _partnerService;
-        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly ICloudinaryService _cloudinaryService;
 
-        public PartnerController(IPartnerService partnerService, IWebHostEnvironment webHostEnvironment)
+        public PartnerController(IPartnerService partnerService, ICloudinaryService cloudinaryService)
         {
             _partnerService = partnerService;
-            _webHostEnvironment = webHostEnvironment;
+            _cloudinaryService = cloudinaryService;
         }
 
         public IActionResult Index()
@@ -28,63 +28,28 @@ namespace CASA3.Controllers
         {
             try
             {
-                // Validate required fields
                 if (string.IsNullOrEmpty(model.Name))
-                {
                     return Json(new { success = false, message = "Partner Name is required." });
-                }
 
-                // Validate Logo
                 if (model.Logo == null || model.Logo.Length == 0)
-                {
                     return Json(new { success = false, message = "Partner Logo is required." });
-                }
 
-                string logoUrl = null;
+                if (model.Logo.Length > 2 * 1024 * 1024)
+                    return Json(new { success = false, message = "Logo size exceeds 2MB limit." });
 
-                // Handle Logo upload
-                if (model.Logo != null && model.Logo.Length > 0)
-                {
-                    // Validate file size (2MB for logos)
-                    if (model.Logo.Length > 2 * 1024 * 1024)
-                    {
-                        return Json(new { success = false, message = "Logo size exceeds 2MB limit." });
-                    }
+                var allowedImageExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg" };
+                var imageExtension = Path.GetExtension(model.Logo.FileName).ToLowerInvariant();
+                if (!Array.Exists(allowedImageExtensions, ext => ext == imageExtension))
+                    return Json(new { success = false, message = "Invalid image type. Only JPG, JPEG, PNG, GIF, WEBP, and SVG files are allowed." });
 
-                    // Validate image file extension
-                    var allowedImageExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg" };
-                    var imageExtension = Path.GetExtension(model.Logo.FileName).ToLowerInvariant();
-                    if (!Array.Exists(allowedImageExtensions, ext => ext == imageExtension))
-                    {
-                        return Json(new { success = false, message = "Invalid image type. Only JPG, JPEG, PNG, GIF, WEBP, and SVG files are allowed." });
-                    }
+                var logoUrl = await _cloudinaryService.UploadImageAsync(model.Logo, "malx/partner-logos");
+                if (string.IsNullOrEmpty(logoUrl))
+                    return Json(new { success = false, message = "Failed to upload partner logo." });
 
-                    // Create upload directory if it doesn't exist
-                    var logoUploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "partner-logos");
-                    if (!Directory.Exists(logoUploadsFolder))
-                    {
-                        Directory.CreateDirectory(logoUploadsFolder);
-                    }
-
-                    // Generate unique filename
-                    var uniqueLogoFileName = $"{Guid.NewGuid()}_{model.Logo.FileName}";
-                    var logoFilePath = Path.Combine(logoUploadsFolder, uniqueLogoFileName);
-
-                    // Save file
-                    using (var stream = new FileStream(logoFilePath, FileMode.Create))
-                    {
-                        await model.Logo.CopyToAsync(stream);
-                    }
-
-                    logoUrl = Path.Combine("uploads", "partner-logos", uniqueLogoFileName).Replace("\\", "/");
-                }
-
-                // Call service to create partner
                 var result = await _partnerService.CreatePartnerService(model, logoUrl);
-
                 return Json(result);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return Json(new { success = false, message = "An error occurred while creating the partner. Please try again." });
             }
@@ -102,57 +67,29 @@ namespace CASA3.Controllers
         {
             try
             {
-                // Validate required fields
                 if (string.IsNullOrEmpty(model.Id) || string.IsNullOrEmpty(model.Name))
-                {
                     return Json(new { success = false, message = "ID and Partner Name are required." });
-                }
 
-                string logoUrl = null;
-
-                // Handle Logo upload (optional for update)
+                string? logoUrl = null;
                 if (model.Logo != null && model.Logo.Length > 0)
                 {
-                    // Validate file size (2MB for logos)
                     if (model.Logo.Length > 2 * 1024 * 1024)
-                    {
                         return Json(new { success = false, message = "Logo size exceeds 2MB limit." });
-                    }
 
-                    // Validate image file extension
                     var allowedImageExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg" };
                     var imageExtension = Path.GetExtension(model.Logo.FileName).ToLowerInvariant();
                     if (!Array.Exists(allowedImageExtensions, ext => ext == imageExtension))
-                    {
                         return Json(new { success = false, message = "Invalid image type. Only JPG, JPEG, PNG, GIF, WEBP, and SVG files are allowed." });
-                    }
 
-                    // Create upload directory if it doesn't exist
-                    var logoUploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "partner-logos");
-                    if (!Directory.Exists(logoUploadsFolder))
-                    {
-                        Directory.CreateDirectory(logoUploadsFolder);
-                    }
-
-                    // Generate unique filename
-                    var uniqueLogoFileName = $"{Guid.NewGuid()}_{model.Logo.FileName}";
-                    var logoFilePath = Path.Combine(logoUploadsFolder, uniqueLogoFileName);
-
-                    // Save file
-                    using (var stream = new FileStream(logoFilePath, FileMode.Create))
-                    {
-                        await model.Logo.CopyToAsync(stream);
-                    }
-
-                    logoUrl = Path.Combine("uploads", "partner-logos", uniqueLogoFileName).Replace("\\", "/");
+                    logoUrl = await _cloudinaryService.UploadImageAsync(model.Logo, "malx/partner-logos");
+                    if (string.IsNullOrEmpty(logoUrl))
+                        return Json(new { success = false, message = "Failed to upload partner logo." });
                 }
 
-                // Call service to update partner
                 var result = await _partnerService.UpdatePartnerService(model, logoUrl);
-
                 return Json(result);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return Json(new { success = false, message = "An error occurred while updating the partner. Please try again." });
             }

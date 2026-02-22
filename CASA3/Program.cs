@@ -50,6 +50,7 @@ internal class Program
         builder.Services.AddScoped<IBlogService, BlogService>();
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<ICarouselService, CarouselService>();
+        builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
         builder.Services.AddMemoryCache();
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddSession(options =>

@@ -17,9 +17,9 @@ namespace CASA3.Controllers
         private readonly IAffiliateService _affiliateService;
         private readonly IContactUsService _contactUsService;
         private readonly INewsletterSubscriptionService _newsletterSubscriptionService;
-        private readonly IWebHostEnvironment _env;
+        private readonly ICloudinaryService _cloudinaryService;
 
-        public AdminController(IStaffService staffService, IProjectService projectService, IMediaService mediaService, IVendorService vendorService, IAffiliateService affiliateService, IContactUsService contactUsService, INewsletterSubscriptionService newsletterSubscriptionService, IWebHostEnvironment env)
+        public AdminController(IStaffService staffService, IProjectService projectService, IMediaService mediaService, IVendorService vendorService, IAffiliateService affiliateService, IContactUsService contactUsService, INewsletterSubscriptionService newsletterSubscriptionService, ICloudinaryService cloudinaryService)
         {
             _staffService = staffService;
             _projectService = projectService;
@@ -28,7 +28,7 @@ namespace CASA3.Controllers
             _affiliateService = affiliateService;
             _contactUsService = contactUsService;
             _newsletterSubscriptionService = newsletterSubscriptionService;
-            _env = env;
+            _cloudinaryService = cloudinaryService;
         }
 
         public IActionResult Index()
@@ -85,20 +85,13 @@ namespace CASA3.Controllers
                     ModelState.AddModelError(string.Empty, "Invalid image type. Allowed: JPG, PNG, GIF, WebP.");
                     return View(model);
                 }
-                if (imageFile.Length > 5 * 1024 * 1024) // 5MB
+                if (imageFile.Length > 5 * 1024 * 1024)
                 {
                     ModelState.AddModelError(string.Empty, "Image size must be 5MB or less.");
                     return View(model);
                 }
 
-                var uploadsDir = Path.Combine(_env.WebRootPath, "uploads", "staff");
-                if (!Directory.Exists(uploadsDir))
-                    Directory.CreateDirectory(uploadsDir);
-                var fileName = $"{Guid.NewGuid()}{ext}";
-                var filePath = Path.Combine(uploadsDir, fileName);
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                    await imageFile.CopyToAsync(stream);
-                model.ImageUrl = $"/uploads/staff/{fileName}";
+                model.ImageUrl = await _cloudinaryService.UploadImageAsync(imageFile, "malx/staff");
             }
 
             var result = await _staffService.CreateStaffAsync(model);
@@ -168,14 +161,7 @@ namespace CASA3.Controllers
                     return View(model);
                 }
 
-                var uploadsDir = Path.Combine(_env.WebRootPath, "uploads", "staff");
-                if (!Directory.Exists(uploadsDir))
-                    Directory.CreateDirectory(uploadsDir);
-                var fileName = $"{Guid.NewGuid()}{ext}";
-                var filePath = Path.Combine(uploadsDir, fileName);
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                    await imageFile.CopyToAsync(stream);
-                model.ImageUrl = $"/uploads/staff/{fileName}";
+                model.ImageUrl = await _cloudinaryService.UploadImageAsync(imageFile, "malx/staff");
             }
             else
             {
@@ -514,15 +500,7 @@ namespace CASA3.Controllers
 
             if (file != null && file.Length > 0)
             {
-                var uploadsDir = Path.Combine(_env.WebRootPath, "uploads", "vendors");
-                if (!Directory.Exists(uploadsDir))
-                    Directory.CreateDirectory(uploadsDir);
-                var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
-                var fileName = $"{Guid.NewGuid()}{ext}";
-                var filePath = Path.Combine(uploadsDir, fileName);
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                    await file.CopyToAsync(stream);
-                model.FilePath = $"/uploads/vendors/{fileName}";
+                model.FilePath = await _cloudinaryService.UploadFileAsync(file, "malx/vendors");
             }
 
             var result = await _vendorService.CreateVendorService(model);
@@ -582,15 +560,7 @@ namespace CASA3.Controllers
 
             if (file != null && file.Length > 0)
             {
-                var uploadsDir = Path.Combine(_env.WebRootPath, "uploads", "vendors");
-                if (!Directory.Exists(uploadsDir))
-                    Directory.CreateDirectory(uploadsDir);
-                var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
-                var fileName = $"{Guid.NewGuid()}{ext}";
-                var filePath = Path.Combine(uploadsDir, fileName);
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                    await file.CopyToAsync(stream);
-                model.FilePath = $"/uploads/vendors/{fileName}";
+                model.FilePath = await _cloudinaryService.UploadFileAsync(file, "malx/vendors");
             }
             else
             {
@@ -726,7 +696,7 @@ namespace CASA3.Controllers
         }
 
         /// <summary>
-        /// Saves file to wwwroot/uploads/media/ and records it in Media table; updates Project/BuildingDesign URL when purpose is Hero, Brochure, Image, or FloorPlan.
+        /// Uploads file to Cloudinary and records it in Media table; updates Project/BuildingDesign URL when purpose is Hero, Brochure, Image, or FloorPlan.
         /// </summary>
         private async Task<string?> SaveMediaFileAsync(IFormFile file, string purpose, string ownerType, string ownerId)
         {
@@ -738,16 +708,18 @@ namespace CASA3.Controllers
                 return null;
             if (!isImage && ext != allowedPdfExtension)
                 return null;
-            if (file.Length > 15 * 1024 * 1024) // 15MB max
+            if (file.Length > 15 * 1024 * 1024)
                 return null;
-            var uploadsDir = Path.Combine(_env.WebRootPath, "uploads", "media");
-            if (!Directory.Exists(uploadsDir))
-                Directory.CreateDirectory(uploadsDir);
-            var fileName = $"{Guid.NewGuid()}{ext}";
-            var filePath = Path.Combine(uploadsDir, fileName);
-            using (var stream = new FileStream(filePath, FileMode.Create))
-                await file.CopyToAsync(stream);
-            var storedPath = $"/uploads/media/{fileName}";
+
+            string? storedPath;
+            if (isImage)
+                storedPath = await _cloudinaryService.UploadImageAsync(file, "malx/media");
+            else
+                storedPath = await _cloudinaryService.UploadFileAsync(file, "malx/media");
+
+            if (string.IsNullOrEmpty(storedPath))
+                return null;
+
             await _mediaService.SaveMediaAsync(storedPath, file.FileName, file.ContentType ?? "application/octet-stream", file.Length, purpose, ownerType, ownerId);
             return storedPath;
         }
