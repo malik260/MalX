@@ -1,26 +1,25 @@
 @model Core.ViewModels.HomePageVM
 
 @{
-    ViewData["Title"] = "Blog";
+    ViewData["Title"] = "Blog & Insights";
 }
 
 <!-- Hero Section -->
-<section class="relative h-[50vh] overflow-hidden">
-    <!-- Background Image -->
-    <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('/images/about-us-hero.jpg');"></div>
+<section class="relative h-[45vh] overflow-hidden bg-[#0F172A]">
+    <div class="absolute inset-0 bg-cover bg-center opacity-15" style="background-image: url('/images/about-us-hero.jpg');"></div>
+    <div class="absolute inset-0" style="background-image: linear-gradient(rgba(37,99,235,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(37,99,235,0.05) 1px, transparent 1px); background-size: 60px 60px;"></div>
     
-    <!-- Overlay -->
-    <div class="absolute inset-0 bg-black/10"></div>
-    
-    <!-- Content -->
     <div class="relative z-10 h-full flex items-center">
         <div class="max-w-7xl mx-auto px-6 w-full">
             <div>
-                <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold mb-4" style="color: #4A4A4A;">
-                    BLOG
+                <span class="inline-block bg-[#2563EB]/20 text-[#60A5FA] text-xs font-semibold px-4 py-2 rounded-full uppercase tracking-widest mb-4 border border-[#2563EB]/30">Knowledge Hub</span>
+                <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold mb-4 text-white" style="font-family:'Space Grotesk',sans-serif;">
+                    BLOG & <span class="text-[#2563EB]">INSIGHTS</span>
                 </h1>
-                <p class="text-lg text-gray-600">
-                    <a href="/" class="hover:text-gray-800">HOME</a> | <span>BLOG</span>
+                <p class="text-gray-400 text-lg">
+                    <a href="/" class="hover:text-white transition">HOME</a>
+                    <span class="text-[#2563EB] mx-2">›</span>
+                    <span>BLOG</span>
                 </p>
             </div>
         </div>
@@ -49,7 +48,7 @@
                         <article class="border-b pb-12 last:border-b-0">
                             <!-- Blog Post Header with Date and Category -->
                             <div class="mb-4">
-                                <span class="text-sm uppercase tracking-wide" style="color: #b39359;">
+                                <span class="text-sm uppercase tracking-wide font-semibold text-[#2563EB]">
                                     @post.Category
                                 </span>
                                 <span class="text-sm text-gray-500 ml-4">
@@ -58,7 +57,7 @@
                             </div>
 
                             <!-- Blog Post Title -->
-                            <h2 class="text-3xl md:text-4xl font-bold mb-6" style="color: #4A4A4A;">
+                            <h2 class="text-3xl md:text-4xl font-bold mb-6 text-[#0F172A]" style="font-family:'Space Grotesk',sans-serif;">
                                 @post.Title
                             </h2>
 
@@ -116,7 +115,7 @@
                                 {
                                     @if (i == Model.Pagination.CurrentPage)
                                     {
-                                        <span class="px-3 py-2 rounded" style="background-color: #b39359; color: white; font-weight: bold;">
+                                        <span class="px-3 py-2 rounded bg-[#2563EB] text-white font-bold">
                                             @i
                                         </span>
                                     }
@@ -155,7 +154,7 @@
             <div class="lg:col-span-1">
                 <!-- Search Section -->
                 <div class="mb-12">
-                    <h3 class="text-2xl font-bold mb-6" style="color: #4A4A4A;">SEARCH</h3>
+                    <h3 class="text-2xl font-bold mb-6 text-[#0F172A]" style="font-family:'Space Grotesk',sans-serif;">SEARCH</h3>
                     <div class="flex flex-col gap-4">
                         <div class="relative">
                             <input type="text" 
@@ -172,7 +171,7 @@
 
                 <!-- Social Media Section -->
                 <div class="mb-12">
-                    <h3 class="text-2xl font-bold mb-6" style="color: #4A4A4A;">FOLLOW US</h3>
+                    <h3 class="text-2xl font-bold mb-6 text-[#0F172A]" style="font-family:'Space Grotesk',sans-serif;">FOLLOW US</h3>
                     <div class="flex gap-4 text-2xl">
                         <a href="#" class="text-gray-600 hover:text-gray-800 transition-colors">
                             <i class="fa fa-facebook"></i>
@@ -191,7 +190,7 @@
 
                 <!-- Recent Posts Section -->
                 <div>
-                    <h3 class="text-2xl font-bold mb-6" style="color: #4A4A4A;">RECENT POSTS</h3>
+                    <h3 class="text-2xl font-bold mb-6 text-[#0F172A]" style="font-family:'Space Grotesk',sans-serif;">RECENT POSTS</h3>
                     <div class="space-y-6">
                         @if (Model.RecentBlogPosts != null && Model.RecentBlogPosts.Any())
                         {
@@ -199,7 +198,7 @@
                             {
                                 <div class="pb-6 border-b last:border-b-0 last:pb-0">
                                     <!-- Date -->
-                                    <p class="text-sm uppercase tracking-wide mb-2" style="color: #b39359;">
+                                    <p class="text-sm uppercase tracking-wide mb-2 text-[#2563EB] font-semibold">
                                         @post.PublishedDate.ToString("MMMM dd, yyyy")
                                     </p>
                                     
@@ -261,14 +260,14 @@
             html += `
                 <article class="border-b pb-12 last:border-b-0">
                     <div class="mb-4">
-                        <span class="text-sm uppercase tracking-wide" style="color: #b39359;">
+                        <span class="text-sm uppercase tracking-wide font-semibold text-[#2563EB]">
                             ${post.category}
                         </span>
                         <span class="text-sm text-gray-500 ml-4">
                             ${formatDate(post.publishedDate)}
                         </span>
                     </div>
-                    <h2 class="text-3xl md:text-4xl font-bold mb-6" style="color: #4A4A4A;">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6 text-[#0F172A]">
                         ${post.title}
                     </h2>
                     ${post.coverImageUrl ? `
@@ -315,7 +314,7 @@
         html += '<div class="flex gap-1 mx-4">';
         for (let i = 1; i <= pagination.totalPages; i++) {
             if (i === pagination.currentPage) {
-                html += `<span class="px-3 py-2 rounded" style="background-color: #b39359; color: white; font-weight: bold;">${i}</span>`;
+                html += `<span class="px-3 py-2 rounded bg-[#2563EB] text-white font-bold">${i}</span>`;
             } else if (i === 1 || i === pagination.totalPages || (i >= pagination.currentPage - 1 && i <= pagination.currentPage + 1)) {
                 html += `<a href="#" class="paginationBtn px-3 py-2 rounded border border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors" data-page="${i}">${i}</a>`;
             } else if (i === 2 || i === pagination.totalPages - 1) {

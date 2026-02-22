@@ -1,100 +1,208 @@
 @model IEnumerable<Core.DTOs.ProjectDto>
 
 @{
-    ViewData["Title"] = "Our Project";
+    ViewData["Title"] = "Our Work";
 }
 
 <!-- Hero Section -->
-<section class="relative h-[85vh] overflow-hidden">
-    <!-- Background Image -->
-    <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('/images/banners/banner-1.jpg');"></div>
+<section class="relative h-[55vh] overflow-hidden bg-[#0F172A]">
+    <div class="absolute inset-0 bg-cover bg-center opacity-15" style="background-image: url('/images/banners/banner-1.jpg');"></div>
+    <div class="absolute inset-0" style="background-image: linear-gradient(rgba(37,99,235,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(37,99,235,0.05) 1px, transparent 1px); background-size: 60px 60px;"></div>
 
-    <!-- Overlay (optional, for better text readability) -->
-    <div class="absolute inset-0 bg-black/10"></div>
-
-    <!-- Content -->
     <div class="relative z-10 h-full flex items-center">
         <div class="max-w-7xl mx-auto px-6 w-full">
-            <div class="text-center mb-10">
-                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 tracking-wide">
-                    MORE THAN A HOME
+            <div class="max-w-2xl">
+                <span class="inline-block bg-[#2563EB]/20 text-[#60A5FA] text-xs font-semibold px-4 py-2 rounded-full uppercase tracking-widest mb-6 border border-[#2563EB]/30">Portfolio</span>
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 tracking-wide" style="font-family:'Space Grotesk',sans-serif;">
+                    OUR <span class="text-[#2563EB]">WORK</span>
                 </h1>
-                <div class="w-24 h-px bg-gray-300 mx-auto"></div>
+                <p class="text-gray-400 text-lg">
+                    A curated showcase of digital solutions we've engineered for our clients — from web platforms and mobile apps to enterprise systems.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats strip -->
+    <div class="absolute bottom-0 left-0 right-0 bg-[#1E293B]/80 backdrop-blur-sm border-t border-[#334155]">
+        <div class="max-w-7xl mx-auto px-6 py-3">
+            <div class="flex flex-wrap gap-8 text-sm text-gray-400">
+                <span><span class="text-white font-bold">@Model.Count()</span> Projects</span>
+                <span><span class="text-white font-bold">@Model.Count(p => p.Category == Core.Enum.ProjectCategory.Web)</span> Web Apps</span>
+                <span><span class="text-white font-bold">@Model.Count(p => p.Category == Core.Enum.ProjectCategory.Mobile)</span> Mobile Apps</span>
+                <span><span class="text-white font-bold">@Model.Count(p => p.Category == Core.Enum.ProjectCategory.Enterprise)</span> Enterprise Systems</span>
             </div>
         </div>
     </div>
 </section>
 
-<section class="pt-16 bg-white">
+<!-- Projects Grid -->
+<section class="bg-[#f8fafc] py-16 md:py-24">
     <div class="max-w-7xl mx-auto px-6">
-        <!-- Intro -->
-        <p class="leading-relaxed mb-10 font-semi-bold text-[14px] text-[#7a7a7a]">
-            We are a purpose-driven real estate company dedicated to creating sustainable living solutions that meet today's needs while thriving as long-term investments. Through our thoughtfully designed, integrated communities, we redefine modern living with a focus on comfort, innovation, and environmental responsibility. We combine cutting-edge technology and forward-thinking design to offer a refined lifestyle experience that enhances quality living.
-        </p>
 
-        <!-- Category Tabs -->
-        <div class="flex mb-12">
-            <button class="tab-btn active" data-category="Luxury">LUXURY</button>
-            <button class="tab-btn" data-category="Premium">PREMIUM</button>
-            <button class="tab-btn" data-category="MidPremium">MID-PREMIUM</button>
-        </div>
-
-        <!-- Projects Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-
-            @foreach (var project in Model)
-            {
-                var category = project.Category?.ToString();
-
-                <div class="project-card" data-category="@category">
-
-                    <!-- Image -->
-                    <a asp-controller="Home" asp-action="ProjectDetails" asp-route-id="@project.Id">
-                        <div class="aspect-[4/3] overflow-hidden mb-4">
-                            <img src="@project.HeroImageUrl"
-                                 alt="@project.Name"
-                                 class="w-full h-full object-cover transition duration-500 hover:scale-105" />
-                        </div>
-                    </a>
-
-                    <!-- Title -->
-                    <h3 class="text-lg font-semibold text-[#333] uppercase mb-3 tracking-wide">
-                        @project.Name
-                    </h3>
-
-                    <!-- Button -->
-                    <a asp-controller="Home" asp-action="ProjectDetails" asp-route-id="@project.Id"
-                       class="inline-block rounded-md px-6 py-2 bg-[#3a3a3a] text-white text-sm hover:bg-[#bc9633] transition">
-                        Discover More
-                    </a>
+        @if (!Model.Any())
+        {
+            <div class="text-center py-24">
+                <div class="w-20 h-20 bg-[#EFF6FF] rounded-full flex items-center justify-center mx-auto mb-6">
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
                 </div>
-            }
-        </div>
+                <h3 class="text-2xl font-bold text-[#0F172A] mb-2">No projects yet</h3>
+                <p class="text-gray-500">Projects will appear here once they are added.</p>
+            </div>
+        }
+        else
+        {
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                @foreach (var project in Model)
+                {
+                    var categoryLabel = project.Category switch
+                    {
+                        Core.Enum.ProjectCategory.Web        => "Web Application",
+                        Core.Enum.ProjectCategory.Mobile     => "Mobile App",
+                        Core.Enum.ProjectCategory.Enterprise => "Enterprise System",
+                        _                                    => "Software"
+                    };
+
+                    var categoryColor = project.Category switch
+                    {
+                        Core.Enum.ProjectCategory.Web        => "bg-[#EFF6FF] text-[#2563EB]",
+                        Core.Enum.ProjectCategory.Mobile     => "bg-[#F5F3FF] text-[#7C3AED]",
+                        Core.Enum.ProjectCategory.Enterprise => "bg-[#ECFDF5] text-[#059669]",
+                        _                                    => "bg-gray-100 text-gray-600"
+                    };
+
+                    var hasUrl   = !string.IsNullOrWhiteSpace(project.Url);
+                    var hasImage = !string.IsNullOrWhiteSpace(project.HeroImageUrl);
+                    var hasDesc  = !string.IsNullOrWhiteSpace(project.Description);
+
+                    <div class="group bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
+
+                        <!-- Image with Overlay -->
+                        <div class="relative overflow-hidden aspect-[16/9] bg-[#0F172A]">
+                            @if (hasImage)
+                            {
+                                <img src="@project.HeroImageUrl"
+                                     alt="@project.Name"
+                                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                     onerror="this.parentElement.classList.add('no-image')" />
+                            }
+                            else
+                            {
+                                <!-- Placeholder when no image -->
+                                <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#1E293B] to-[#0F172A]">
+                                    <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="opacity-40"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                                </div>
+                            }
+
+                            <!-- Hover overlay with Visit Website button -->
+                            @if (hasUrl)
+                            {
+                                <div class="absolute inset-0 bg-[#0F172A]/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                    <a href="@project.Url"
+                                       target="_blank"
+                                       rel="noopener noreferrer"
+                                       class="flex items-center gap-2 bg-[#2563EB] text-white px-6 py-3 rounded-xl font-semibold text-sm hover:bg-[#1D4ED8] transition-colors duration-200 shadow-lg">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                                        Visit Website
+                                    </a>
+                                </div>
+                            }
+
+                            <!-- Year badge -->
+                            @if (project.Year.HasValue)
+                            {
+                                <div class="absolute top-3 right-3 bg-[#0F172A]/80 text-gray-300 text-xs font-semibold px-3 py-1 rounded-full backdrop-blur-sm">
+                                    @project.Year
+                                </div>
+                            }
+
+                            <!-- Featured badge -->
+                            @if (project.IsFeatured)
+                            {
+                                <div class="absolute top-3 left-3 bg-[#2563EB] text-white text-xs font-bold px-3 py-1 rounded-full">
+                                    Featured
+                                </div>
+                            }
+                        </div>
+
+                        <!-- Card Body -->
+                        <div class="p-6 flex flex-col flex-grow">
+                            <!-- Category Badge -->
+                            <span class="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3 self-start @categoryColor uppercase tracking-wide">
+                                @categoryLabel
+                            </span>
+
+                            <!-- Project Name -->
+                            <h3 class="text-lg font-bold text-[#0F172A] mb-3 leading-snug" style="font-family:'Space Grotesk',sans-serif;">
+                                @project.Name
+                            </h3>
+
+                            <!-- Description -->
+                            @if (hasDesc)
+                            {
+                                <p class="text-gray-500 text-sm leading-relaxed mb-4 flex-grow line-clamp-3">
+                                    @project.Description
+                                </p>
+                            }
+                            else
+                            {
+                                <div class="flex-grow"></div>
+                            }
+
+                            <!-- Action Buttons -->
+                            <div class="flex items-center gap-3 pt-4 border-t border-gray-100 mt-4">
+                                <!-- Visit Website - primary if URL exists -->
+                                @if (hasUrl)
+                                {
+                                    <a href="@project.Url"
+                                       target="_blank"
+                                       rel="noopener noreferrer"
+                                       class="flex-1 flex items-center justify-center gap-2 bg-[#2563EB] text-white px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-[#1D4ED8] transition-colors duration-200">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                                        Visit Website
+                                    </a>
+                                }
+
+                                <!-- View Details - always shown -->
+                                <a asp-controller="Home" asp-action="ProjectDetails" asp-route-id="@project.Id"
+                                   class="@(hasUrl ? "" : "flex-1") flex items-center justify-center gap-2 bg-[#f1f5f9] text-[#0F172A] px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-[#e2e8f0] transition-colors duration-200 @(hasUrl ? "" : "w-full")">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                                    Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
     </div>
 </section>
 
-<script>
-    const buttons = document.querySelectorAll(".tab-btn");
-    const cards = document.querySelectorAll(".project-card");
+<!-- CTA Section -->
+<section class="bg-[#0F172A] py-16">
+    <div class="max-w-3xl mx-auto px-6 text-center">
+        <div class="w-14 h-14 bg-[#2563EB]/20 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-[#2563EB]/30">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#60A5FA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+        </div>
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-4" style="font-family:'Space Grotesk',sans-serif;">
+            Have a Project in Mind?
+        </h2>
+        <p class="text-gray-400 mb-8 text-lg max-w-xl mx-auto">
+            Let's discuss how MAL-X can engineer the right solution for your business goals.
+        </p>
+        <a asp-controller="Home" asp-action="ContactUs"
+           class="inline-block px-10 py-4 bg-[#2563EB] text-white font-semibold rounded-xl hover:bg-[#1D4ED8] transition-colors duration-300 text-lg">
+            Start a Conversation
+        </a>
+    </div>
+</section>
 
-    buttons.forEach(btn => {
-        btn.addEventListener("click", () => {
-
-            // active style
-            buttons.forEach(b => b.classList.remove("active"));
-            btn.classList.add("active");
-
-            const category = btn.getAttribute("data-category");
-
-            cards.forEach(card => {
-                card.style.display =
-                    card.getAttribute("data-category") === category
-                        ? "block"
-                        : "none";
-            });
-        });
-    });
-
-    // trigger first tab on load
-    document.querySelector(".tab-btn.active").click();
-</script>
+<style>
+    .line-clamp-3 {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+</style>

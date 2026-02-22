@@ -1,30 +1,49 @@
-﻿@model Core.ViewModels.HomePageVM
+@model Core.ViewModels.HomePageVM
 
 @{
     ViewData["Title"] = "About Us";
 }
 
 <!-- Hero Section -->
-<section class="relative h-[85vh] overflow-hidden">
-    <!-- Background Image -->
-    <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('/images/about-us-hero.jpg');"></div>
-                
-    <!-- Overlay (optional, for better text readability) -->
-    <div class="absolute inset-0 bg-black/10"></div>
-    
-    <!-- Content -->
+<section class="relative h-[70vh] overflow-hidden bg-[#0F172A]">
+    <div class="absolute inset-0 bg-cover bg-center opacity-20" style="background-image: url('/images/about-us-hero.jpg');"></div>
+    <!-- Animated grid overlay -->
+    <div class="absolute inset-0" style="background-image: linear-gradient(rgba(37,99,235,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(37,99,235,0.05) 1px, transparent 1px); background-size: 60px 60px;"></div>
+
     <div class="relative z-10 h-full flex items-center">
         <div class="max-w-7xl mx-auto px-6 w-full">
-            <div class="max-w-md">
-                <!-- Main Title -->
-                <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold mb-4" style="color: #4A4A4A;">
-                    ABOUT US
+            <div class="max-w-2xl">
+                <span class="inline-block bg-[#2563EB]/20 text-[#60A5FA] text-xs font-semibold px-4 py-2 rounded-full uppercase tracking-widest mb-6 border border-[#2563EB]/30">Who We Are</span>
+                <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold mb-4 text-white leading-tight" style="font-family:'Space Grotesk',sans-serif;">
+                    ABOUT <span class="text-[#2563EB]">MAL-X</span>
                 </h1>
-                
-                <!-- Subtitle -->
-                <p class="text-2xl md:text-3xl lg:text-4xl font-normal" style="color: #7A7A7A;">
-                    IT'S REALLY ABOUT YOU
+                <p class="text-2xl md:text-3xl font-normal text-gray-400">
+                    Engineering the Future, One Solution at a Time
                 </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Bar -->
+    <div class="absolute bottom-0 left-0 right-0 bg-[#1E293B]/90 backdrop-blur-sm border-t border-[#334155]">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                <div>
+                    <p class="text-2xl md:text-3xl font-bold text-white">15+</p>
+                    <p class="text-xs text-gray-400 uppercase tracking-wide">Projects Delivered</p>
+                </div>
+                <div>
+                    <p class="text-2xl md:text-3xl font-bold text-white">10+</p>
+                    <p class="text-xs text-gray-400 uppercase tracking-wide">Team Members</p>
+                </div>
+                <div>
+                    <p class="text-2xl md:text-3xl font-bold text-white">5+</p>
+                    <p class="text-xs text-gray-400 uppercase tracking-wide">Tech Partners</p>
+                </div>
+                <div>
+                    <p class="text-2xl md:text-3xl font-bold text-white">3+</p>
+                    <p class="text-xs text-gray-400 uppercase tracking-wide">Years of Excellence</p>
+                </div>
             </div>
         </div>
     </div>
@@ -38,35 +57,42 @@
             <!-- Left Content -->
             <div class="space-y-8">
                 <!-- CEO Quote -->
-                <div>
+                <div class="bg-[#EFF6FF] rounded-2xl p-8 border-l-4 border-[#2563EB]">
                     <blockquote class="text-xl md:text-2xl font-bold italic text-gray-900 mb-4 leading-relaxed">
-                        "Owning a home is one of life’s greatest milestones. At CASA III, we walk that journey with our clients; turning hope into keys, and investments into lasting legacies"
+                        "Technology is not just a tool — it is the infrastructure of progress. At MAL-X, we engineer solutions that don't just work today, but scale for tomorrow."
                     </blockquote>
-                    <p class="text-base md:text-lg text-gray-700">
-                        — Fawaz Suleiman, Chief Executive Officer, CASA III
+                    <p class="text-base md:text-lg text-gray-600 font-medium">
+                        — Founder & CEO, MAL-X Software Limited
                     </p>
                 </div>
                 
                 <!-- Company Description -->
                 <div class="space-y-6 text-gray-700 text-base md:text-lg leading-relaxed">
                     <p>
-                        At CASA III, real estate is not just about structures; it is about creating elevated living experiences that shape how people feel, live, and grow. Every home we build is inspired by global standards of excellence and thoughtfully crafted to meet the realities of modern living, blending beauty, functionality, and enduring value.
+                        At MAL-X Software Limited, software is not just code — it is the backbone of modern business. We engineer robust, scalable, and user-centric digital solutions that help organisations innovate faster, operate smarter, and achieve measurable results.
                     </p>
                     
                     <p>
-                        We work with homeowners and investors who seek more than property — they seek quality, confidence, and long-term worth. Driven by a passionate team of professionals, CASA III is built on trust, attention to detail, and a relentless commitment to delivering world-inspired homes that truly stand apart.
+                        We work with startups and enterprise clients who demand more than just development — they seek strategic technology partners with a deep understanding of their business goals. Driven by a team of experienced engineers, designers, and strategists, MAL-X is built on a foundation of technical excellence, agile delivery, and unwavering commitment to quality.
                     </p>
                     
                     <p>
-                        Our developments reflect a forward-thinking vision for African cities — embracing smart design, sustainable practices, and innovative construction methods that ensure comfort today and value for tomorrow. As lifestyles evolve, we continue to raise the bar, refining how we build and how we serve, always guided by one promise: to create homes that elevate living and leave lasting impact.
+                        From custom enterprise platforms and mobile applications to cloud infrastructure and data analytics, our solutions are designed to deliver measurable impact. We blend cutting-edge technology with thoughtful product thinking to help our clients stay competitive in a rapidly evolving digital landscape.
                     </p>
                 </div>
             </div>
             
             <!-- Right Image -->
             <div class="relative w-full lg:sticky lg:top-24">
-                <div class="aspect-[5/5] w-full overflow-hidden shadow-2xl">
-                    <img src="/images/Fawaz-Suleiman.jpeg" alt="Fawaz Suleiman - Chief Executive Officer" class="w-full h-full object-cover" />
+                <div class="aspect-[5/5] w-full overflow-hidden shadow-2xl rounded-2xl">
+                    <img src="/images/Malik.png" alt="MAL-X Software CEO" class="w-full h-full object-cover" />
+                </div>
+                <!-- Tech Stack Badge -->
+                <div class="absolute -bottom-6 -left-6 bg-[#0F172A] text-white px-6 py-4 rounded-2xl shadow-xl">
+                    <p class="text-xs text-gray-400 uppercase tracking-widest mb-1">Core Technologies</p>
+                    <div class="flex gap-3 text-sm font-semibold text-[#60A5FA]">
+                        <span>.NET</span><span>Angular</span><span>AWS</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -74,100 +100,98 @@
 </section>
 
 <!-- What We Do Section -->
-<section class="bg-[#484747] py-16 md:py-24">
+<section class="bg-[#0F172A] py-16 md:py-24">
     <div class="max-w-7xl mx-auto px-6 lg:px-8">
         <!-- Section Title -->
-        <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold text-center mb-16" style="color: #b39359;">
-            WHAT WE DO
-        </h2>
+        <div class="text-center mb-16">
+            <span class="inline-block bg-[#2563EB]/20 text-[#60A5FA] text-xs font-semibold px-4 py-2 rounded-full uppercase tracking-widest mb-4 border border-[#2563EB]/30">Our Expertise</span>
+            <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white" style="font-family:'Space Grotesk',sans-serif;">
+                WHAT WE <span class="text-[#2563EB]">DO</span>
+            </h2>
+        </div>
 
-        <!-- Property Development Section -->
-        <div class="mb-16 pb-16 border-b border-gray-700">
+        <!-- Software Development Section -->
+        <div class="mb-16 pb-16 border-b border-[#1E293B]">
             <div class="grid lg:grid-cols-2 gap-12 items-center">
                 <!-- Left Content -->
                 <div class="space-y-6">
-                    <!-- Title with Icon -->
                     <div class="flex items-center gap-4 mb-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"  style="color: #b39359;">
-                            <path fill="currentColor" d="M62.88 0H23.34c-.4 0-.72.32-.72.72 0 .4.32.72.72.72h38.83v42.49H23.46v-3.67l12.32-.06c.08.01.16.01.23 0l20.41-.1c.39 0 .71-.32.71-.72V19.31a.72.72 0 0 0-.17-.46L46.82 6.81s-.05-.05-.07-.08l-.01-.01a.727.727 0 0 0-.46-.17H24.4c-.21 0-.41.09-.54.25l-.38.45V3.97c0-2.59-5.91-3.95-11.74-3.95S0 1.36 0 3.95v51.51c0 2.71 6.07 3.95 11.71 3.95 5.64 0 11.74-1.24 11.74-3.95v-2.52h39.42c.4 0 .72-.32.72-.72V.72c0-.4-.32-.72-.72-.72h.01Zm-27.7 38.76-11.72.06V20.01h11.72v18.75Zm14.4-.08h-6.59v-8.65h6.59v8.65Zm6.12-.02-4.69.02v-9.36c0-.4-.32-.72-.72-.72h-8.02c-.4 0-.72.32-.72.72v9.41l-4.95.03V20.02h19.09v18.64h.01Zm-.82-20.07h-17.6l8.98-10.24 8.62 10.24ZM24.71 7.96h19.97l-9.32 10.62H23.45V9.43l1.26-1.47Zm-13-6.53c6.67 0 10.31 1.66 10.31 2.52 0 .86-3.64 2.55-10.31 2.55-1.23 0-2.35-.06-3.37-.16V4.11c.89-.12 1.79-.18 2.66-.18 2.1 0 4.15.32 5.36.83.36.15.78-.02.94-.38a.728.728 0 0 0-.38-.94C14.83 2.56 11 2.2 7.51 2.79c-.34.06-.6.36-.6.71v2.67c-3.57-.53-5.48-1.59-5.48-2.21 0-.86 3.63-2.52 10.28-2.52v-.01Zm10.31 54.03c0 .86-3.64 2.52-10.31 2.52S1.43 56.32 1.43 55.46V5.96s.04.02.05.03c.24.14.5.28.78.41.06.03.12.05.18.07.26.11.53.21.82.31.06.02.11.04.17.06 1.2.39 2.62.67 4.16.86h.05c1.31.15 2.69.23 4.07.23 3.03 0 6.08-.37 8.31-1.09.06-.02.12-.04.19-.06.28-.1.55-.2.8-.31.06-.03.12-.05.18-.08.28-.13.54-.26.78-.4.02 0 .04-.02.05-.03v49.5Zm40.14-3.95h-38.7v-6.16h38.71v6.16h-.01Z"></path><path fill="currentColor" d="M44.11 18.12h4.31c.4 0 .72-.32.72-.72v-4.35c0-.4-.32-.72-.72-.72h-4.31c-.4 0-.72.32-.72.72v4.35c0 .4.32.72.72.72Zm.72-4.35h2.88v2.92h-2.88v-2.92ZM43.43 28.17h5.7c.4 0 .72-.32.72-.72V21.7c0-.4-.32-.72-.72-.72h-5.7c-.4 0-.72.32-.72.72v5.75c0 .4.32.72.72.72Zm.72-5.75h4.27v4.32h-4.27v-4.32Z">
-                            </path></svg>
-                        <h3 class="text-2xl md:text-3xl font-bold" style="color: #b39359;">
-                            PROPERTY DEVELOPMENT
+                        <div class="w-14 h-14 bg-[#2563EB]/20 rounded-xl flex items-center justify-center border border-[#2563EB]/30">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#60A5FA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                        </div>
+                        <h3 class="text-2xl md:text-3xl font-bold text-[#60A5FA]">
+                            SOFTWARE DEVELOPMENT
                         </h3>
                     </div>
-
-                    <!-- Text Content -->
-                    <div class="space-y-4 text-white text-base md:text-lg leading-relaxed">
+                    <div class="space-y-4 text-gray-300 text-base md:text-lg leading-relaxed">
                         <p>
-                            At CASA III, property development starts with how people live today and how they aspire to live tomorrow. In a complex and fast-evolving real estate landscape, we turn opportunity into lasting value through insight, innovation, and purposeful delivery.
+                            At MAL-X, software development begins with understanding your business deeply — the challenges, the users, and the outcomes that matter. In a competitive and fast-changing technology landscape, we turn complex requirements into elegant, performant digital solutions.
                         </p>
                         <p>
-                            We develop high-end residential and commercial properties that reflect global design standards while responding to local realities. Each project balances elegance with functionality, creating spaces that are practical, adaptable, and built to endure.
+                            We develop bespoke web applications, enterprise platforms, APIs, and SaaS products that reflect the highest engineering standards while responding to real-world constraints. Each solution is architected for scalability, security, and maintainability.
                         </p>
                         <p>
-                            Our approach is driven by smart planning, innovative financing, and strategic partnerships that streamline delivery without compromising quality. Beyond buildings, CASA III creates environments that elevate everyday living and shape refined, future-ready communities.
+                            Our approach integrates agile methodology, modern frameworks, and DevOps practices to deliver software on time, within budget, and with exceptional quality — so your business stays ahead of the curve.
                         </p>
                     </div>
                 </div>
 
                 <!-- Right Image -->
                 <div class="relative w-full">
-                    <div class="aspect-[4/3] w-full overflow-hidden shadow-2xl">
+                    <div class="aspect-[4/3] w-full overflow-hidden shadow-2xl rounded-2xl">
                         <img src="/images/building-design.webp" 
-                             alt="Property Development" 
+                             alt="Software Development" 
                              class="w-full h-full object-cover" />
+                        <div class="absolute inset-0 bg-[#0F172A]/40 rounded-2xl"></div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Advisory Services Section -->
+        <!-- Technology Consulting Section -->
         <div>
             <div class="grid lg:grid-cols-2 gap-12 items-center">
-                <!-- Left Content -->
-                
+                <!-- Left Image -->
                 <div class="relative w-full">
-                    <div class="aspect-[4/3] w-full overflow-hidden shadow-2xl">
-                        <img src="/images/site-engineers.webp"
-                             alt="Advisory Services" 
+                    <div class="aspect-[4/3] w-full overflow-hidden shadow-2xl rounded-2xl">
+                        <img src="https://images.unsplash.com/photo-1553877522-43269d4ea984?w=800&auto=format&fit=crop"
+                             alt="Technology Consulting" 
                              class="w-full h-full object-cover" />
+                        <div class="absolute inset-0 bg-[#0F172A]/40 rounded-2xl"></div>
                     </div>
                 </div>
 
+                <!-- Right Content -->
                 <div class="space-y-6">
-                    <!-- Title with Icon -->
                     <div class="flex items-center gap-4 mb-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #b39359;">
-                            <line x1="12" y1="1" x2="12" y2="23"></line>
-                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                        </svg>
-                        <h3 class="text-2xl md:text-3xl font-bold" style="color: #b39359;">
-                            ADVISORY SERVICES
+                        <div class="w-14 h-14 bg-[#7C3AED]/20 rounded-xl flex items-center justify-center border border-[#7C3AED]/30">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+                        </div>
+                        <h3 class="text-2xl md:text-3xl font-bold text-[#A78BFA]">
+                            TECHNOLOGY CONSULTING
                         </h3>
                     </div>
-
-                    <!-- Text Content -->
-                    <div class="space-y-4 text-white text-base md:text-lg leading-relaxed">
+                    <div class="space-y-4 text-gray-300 text-base md:text-lg leading-relaxed">
                         <p>
-                            At CASA III, our advisory practice is built to guide clients confidently through real estate investment and development. We combine market insight, strategic thinking, and hands-on experience to help clients unlock value and achieve well-structured, successful outcomes.
+                            Our consulting practice helps businesses make smart, future-focused technology decisions. We combine market insight, architectural expertise, and strategic thinking to guide organisations through complex digital transformations.
                         </p>
                         
                         <div class="space-y-4">
-                            <div>
-                                <h4 class="font-semibold text-lg mb-2" style="color: #b39359;">
-                                    • Investment Strategy & Guidance
+                            <div class="bg-[#1E293B] rounded-xl p-5 border border-[#334155]">
+                                <h4 class="font-semibold text-[#60A5FA] text-lg mb-2">
+                                    ▸ Digital Strategy & Architecture
                                 </h4>
-                                <p>
-                                    We support clients in making smart, future-focused property decisions through tailored advice, strong market intelligence, and trusted partnerships — always anchored in transparency and long-term value.
+                                <p class="text-gray-400 text-sm">
+                                    We help you design technology roadmaps, select the right stack, and build systems that align with long-term business objectives — always grounded in pragmatism and proven patterns.
                                 </p>
                             </div>
                             
-                            <div>
-                                <h4 class="font-semibold text-lg mb-2" style="color: #b39359;">
-                                    • Project Delivery & Management
+                            <div class="bg-[#1E293B] rounded-xl p-5 border border-[#334155]">
+                                <h4 class="font-semibold text-[#60A5FA] text-lg mb-2">
+                                    ▸ Project Delivery & Technical Leadership
                                 </h4>
-                                <p>
-                                    From concept to completion, our team oversees every stage of development with precision, efficiency, and quality control, ensuring projects are delivered smoothly, on time, and to the highest standards.
+                                <p class="text-gray-400 text-sm">
+                                    From inception to launch, our team provides technical oversight, agile project management, and quality assurance — ensuring your project is delivered on time, on spec, and to the highest standards.
                                 </p>
                             </div>
                         </div>
@@ -183,36 +207,35 @@
     <div class="max-w-7xl mx-auto px-6 lg:px-8">
         
         <!-- Section Title -->
-        <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold text-center mb-20" style="color: #4A4A4A;">
-            MEET OUR TEAM
-        </h2>
+        <div class="text-center mb-20">
+            <span class="inline-block bg-[#EFF6FF] text-[#2563EB] text-xs font-semibold px-4 py-2 rounded-full uppercase tracking-widest mb-4">Our People</span>
+            <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold text-[#0F172A]" style="font-family:'Space Grotesk',sans-serif;">
+                MEET OUR TEAM
+            </h2>
+        </div>
 
-        <!-- Board of Directors Section -->
-        <div class="mb-20">
-            <h3 class="text-3xl md:text-4xl font-bold mb-12" style="color: #b39359;">
-                Board Of Directors
+        <!-- Leadership Section -->
+      @*   <div class="mb-20">
+            <h3 class="text-3xl md:text-4xl font-bold mb-12 text-[#2563EB]">
+                Leadership
             </h3>
             
-            <!-- BOD Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                 @foreach(var member in Model.BoardOfDirectors)
                 {
                     <div class="team-member-card cursor-pointer" data-id="@member.Id">
-                        <!-- Image Container with Hover Effects -->
-                        <div class="team-image-wrapper overflow-hidden bg-gray-200 mb-6">
-                            <!-- Grayscale Image -->
+                        <div class="team-image-wrapper overflow-hidden bg-gray-100 mb-6 rounded-xl">
                             <img src="@member.ImageUrl" 
                                  alt="@member.Name" 
-                                 class="team-member-image w-full h-auto aspect-square object-cover" 
+                                 class="team-member-image w-full h-auto aspect-square object-cover rounded-xl" 
                                  onerror="this.src='/images/team/placeholder.jpg'" />
                             
-                            <!-- LinkedIn Icon Container (hidden by default, shows on image hover) -->
-                            <div class="team-linkedin-container absolute inset-0 flex items-end justify-center pb-6 opacity-0 transition-opacity duration-300 z-10">
+                            <div class="team-linkedin-container absolute inset-0 flex items-end justify-center pb-6 opacity-0 transition-opacity duration-300 z-10 rounded-xl">
                                 <a href="@member.LinkedInUrl" 
                                    target="_blank" 
                                    rel="noopener noreferrer"
                                    title="Visit LinkedIn Profile"
-                                   class="team-linkedin-icon w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center text-white transition-transform hover:scale-110 duration-300">
+                                   class="team-linkedin-icon w-12 h-12 bg-[#2563EB] rounded-full flex items-center justify-center text-white transition-transform hover:scale-110 duration-300">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                                         <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
                                     </svg>
@@ -220,12 +243,11 @@
                             </div>
                         </div>
                         
-                        <!-- Member Info -->
                         <div class="text-center">
-                            <h4 class="font-bold text-lg mb-2" style="color: #4A4A4A;">
+                            <h4 class="font-bold text-lg mb-1 text-[#0F172A]">
                                 @member.Name
                             </h4>
-                            <p class="text-sm text-gray-600 tracking-wide">
+                            <p class="text-sm text-[#2563EB] tracking-wide font-medium">
                                 @member.Position
                             </p>
                         </div>
@@ -233,33 +255,29 @@
                 }
             </div>
         </div>
-
-        <!-- Management Team Section -->
+ *@
+        <!-- Engineering Team Section -->
         <div>
-            <h3 class="text-3xl md:text-4xl font-bold mb-12" style="color: #b39359;">
-                Management Team
+            <h3 class="text-3xl md:text-4xl font-bold mb-12 text-[#2563EB]">
+                Lead Engineering Team
             </h3>
             
-            <!-- Management Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                 @foreach(var member in Model.ManagementTeam)
                 {
                     <div class="team-member-card cursor-pointer" data-id="@member.Id">
-                        <!-- Image Container with Hover Effects -->
-                        <div class="team-image-wrapper overflow-hidden bg-gray-200 mb-6">
-                            <!-- Grayscale Image -->
+                        <div class="team-image-wrapper overflow-hidden bg-gray-100 mb-6 rounded-xl">
                             <img src="@member.ImageUrl" 
                                  alt="@member.Name" 
-                                 class="team-member-image w-full h-auto aspect-square object-cover" 
+                                 class="team-member-image w-full h-auto aspect-square object-cover rounded-xl" 
                                  onerror="this.src='/images/dummy user.jpg'" />
                             
-                            <!-- LinkedIn Icon Container (hidden by default, shows on image hover) -->
-                            <div class="team-linkedin-container absolute inset-0 flex items-end justify-center pb-6 opacity-0 transition-opacity duration-300 z-10">
+                            <div class="team-linkedin-container absolute inset-0 flex items-end justify-center pb-6 opacity-0 transition-opacity duration-300 z-10 rounded-xl">
                                 <a href="@member.LinkedInUrl" 
                                    target="_blank" 
                                    rel="noopener noreferrer"
                                    title="Visit LinkedIn Profile"
-                                   class="team-linkedin-icon w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center text-white transition-transform hover:scale-110 duration-300">
+                                   class="team-linkedin-icon w-12 h-12 bg-[#2563EB] rounded-full flex items-center justify-center text-white transition-transform hover:scale-110 duration-300">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                                         <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
                                     </svg>
@@ -267,12 +285,11 @@
                             </div>
                         </div>
                         
-                        <!-- Member Info -->
                         <div class="text-center">
-                            <h4 class="font-bold text-lg mb-2" style="color: #4A4A4A;">
+                            <h4 class="font-bold text-lg mb-1 text-[#0F172A]">
                                 @member.Name
                             </h4>
-                            <p class="text-sm text-gray-600 tracking-wide">
+                            <p class="text-sm text-[#2563EB] tracking-wide font-medium">
                                 @member.Position
                             </p>
                         </div>
@@ -284,48 +301,70 @@
     </div>
 </section>
 
-<!-- Sustainable Value Approach Section -->
-<section class="bg-white py-16 md:py-24">
+<!-- Our Commitment Section -->
+<section class="bg-[#f8fafc] py-16 md:py-24">
     <div class="max-w-7xl mx-auto px-6 lg:px-8">
         <div class="grid lg:grid-cols-2 gap-12 items-center">
             
-            <!-- Left Content - Flower Image -->
-            <div class="flex justify-center">
-                <div class="w-full max-w-md">
-                    <img src="/images/flower.webp" 
-                         alt="Sustainable Growth" 
-                         class="w-full h-auto" />
+            <!-- Left Content - Values -->
+            <div class="space-y-6">
+                <span class="inline-block bg-[#EFF6FF] text-[#2563EB] text-xs font-semibold px-4 py-2 rounded-full uppercase tracking-widest">Our Values</span>
+                <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-[#0F172A]" style="font-family:'Space Grotesk',sans-serif;">
+                    OUR COMMITMENT TO RESPONSIBLE TECHNOLOGY
+                </h2>
+                <p class="text-gray-600 text-base md:text-lg leading-relaxed">
+                    In alignment with our values, MAL-X Software is committed to building technology that creates lasting positive impact — for our clients, their users, and the communities they serve.
+                </p>
+                <div class="space-y-4">
+                    @{
+                        var values = new[] {
+                            ("Security First", "We build with security and privacy by design in every layer of our systems."),
+                            ("Ethical AI & Data", "We ensure all data-driven solutions respect user rights and promote fairness."),
+                            ("Digital Inclusion", "We advocate for accessible design so technology works for everyone."),
+                            ("Sustainability", "We optimise code and infrastructure for efficiency, reducing digital carbon footprint.")
+                        };
+                    }
+                    @foreach(var (title, desc) in values)
+                    {
+                        <div class="flex items-start gap-4 bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+                            <div class="w-10 h-10 bg-[#EFF6FF] rounded-lg flex items-center justify-center flex-shrink-0">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-900 mb-1">@title</h4>
+                                <p class="text-gray-500 text-sm">@desc</p>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="pt-4">
+                    <a asp-controller="Home" asp-action="ContactUs" class="inline-block px-8 py-3 bg-[#2563EB] text-white font-semibold rounded-xl hover:bg-[#1D4ED8] transition-colors duration-300">
+                        Work With Us
+                    </a>
                 </div>
             </div>
 
-            <!-- Right Content -->
-            <div class="space-y-6">
-                <!-- Section Title -->
-                <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold" style="color: #4A4A4A;">
-                    OUR APPROACH TO SUSTAINABLE VALUE
-                </h2>
-
-                <!-- Description Content -->
-                <div class="space-y-6 text-gray-700 text-base md:text-lg leading-relaxed">
-                    <p>
-                        In alignment with our code of business ethics, the leadership of CASA III Realty reaffirms its commitment to contributing meaningfully to societal development.
-                    </p>
-
-                    <p>
-                        As part of this commitment, the <span class="font-semibold text-gray-900">CASA III Development Trust</span> plays a key role in advancing initiatives that create long-term value for communities and the environment.
-                    </p>
-
-                    <p>
-                        Through this dedicated vehicle, we continue to translate our values into actions, building not just spaces, but a more sustainable and inclusive future for all.
-                    </p>
-                </div>
-
-                <!-- CTA Button -->
-                <div class="pt-4">
-                    <a href="#" class="inline-block px-8 py-3 bg-black text-white font-semibold rounded-lg hover:bg-gray-800 transition-colors duration-300">
-                        Discover More
-                    </a>
-                </div>
+            <!-- Right - Tech Stack visual -->
+            <div class="grid grid-cols-2 gap-4">
+                @{
+                    var techStack = new[] {
+                        ("ASP.NET Core", "#512BD4", "C#"),
+                        ("React / Next.js", "#61DAFB", "JS"),
+                        ("Flutter", "#02569B", "Dart"),
+                        ("Node.js", "#339933", "JS"),
+                        ("PostgreSQL", "#336791", "DB"),
+                        ("Docker & K8s", "#2496ED", "Ops"),
+                        ("AWS / Azure", "#FF9900", "Cloud"),
+                        ("Python / AI", "#3776AB", "AI/ML")
+                    };
+                }
+                @foreach(var (name, color, tag) in techStack)
+                {
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+                        <div class="w-10 h-10 rounded-lg mb-3 flex items-center justify-center text-white text-xs font-bold" style="background-color:@color;">@tag</div>
+                        <p class="font-semibold text-gray-900 text-sm">@name</p>
+                    </div>
+                }
             </div>
 
         </div>
@@ -335,41 +374,24 @@
 
 <!-- Team Member Modal -->
 <div id="teamModal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50 p-6">
-    <div class="bg-white w-full max-w-5xl max-h-[95vh] overflow-y-auto rounded-xl shadow-2xl relative">
+    <div class="bg-white w-full max-w-5xl max-h-[95vh] overflow-y-auto rounded-2xl shadow-2xl relative">
 
-        <!-- Close button -->
         <button id="closeTeamModal"
                 class="absolute top-5 right-6 text-gray-500 hover:text-black text-3xl font-bold z-20">
             &times;
         </button>
 
         <div class="p-8 md:p-12">
-
-            <!-- Header -->
             <div class="mb-6">
-                <h3 id="modalName"
-                    class="text-3xl md:text-4xl font-bold"
-                    style="color:#4A4A4A;"></h3>
-
-                <p id="modalPosition"
-                   class="text-lg md:text-xl text-gray-600 mt-2"></p>
+                <h3 id="modalName" class="text-3xl md:text-4xl font-bold text-[#0F172A]"></h3>
+                <p id="modalPosition" class="text-lg md:text-xl text-[#2563EB] mt-2 font-medium"></p>
             </div>
 
-            <!-- IMAGE + TEXT WRAP -->
             <div class="text-gray-700 text-base md:text-lg leading-relaxed">
-
-                <!-- floated image -->
-                <img id="modalImage"
-                     src=""
-                     class="w-full sm:w-80 float-left mr-8 mb-4 object-cover shadow-lg" />
-
-                <!-- biography -->
+                <img id="modalImage" src="" class="w-full sm:w-80 float-left mr-8 mb-4 object-cover shadow-lg rounded-xl" />
                 <div id="modalInfo" class="whitespace-pre-line"></div>
-
-                <!-- important: clears float after text -->
                 <div class="clear-both"></div>
             </div>
-
         </div>
     </div>
 </div>
@@ -380,12 +402,9 @@
         const modal = document.getElementById("teamModal");
         const closeBtn = document.getElementById("closeTeamModal");
 
-        // open modal on card click
         document.querySelectorAll(".team-member-card").forEach(card => {
             card.addEventListener("click", function () {
-
                 const id = this.getAttribute("data-id");
-
                 fetch(`/Home/GetTeamMember?id=${id}`)
                     .then(res => res.json())
                     .then(data => {
@@ -393,18 +412,15 @@
                         document.getElementById("modalName").innerText = data.name;
                         document.getElementById("modalPosition").innerText = data.position;
                         document.getElementById("modalInfo").innerText = data.memberInfo;
-
                         modal.classList.remove("hidden");
                         modal.classList.add("flex");
                     });
             });
         });
 
-        // close only via button
         closeBtn.addEventListener("click", function () {
             modal.classList.add("hidden");
             modal.classList.remove("flex");
         });
-
     });
 </script>

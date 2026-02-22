@@ -11,8 +11,14 @@
     <div class="relative z-10 w-full max-w-md mx-4">
         <div class="bg-white rounded-2xl shadow-2xl p-8 md:p-10 border border-gray-100">
             <div class="text-center mb-8">
+                <div class="flex items-center justify-center gap-2 mb-4">
+                    <div class="w-8 h-8 bg-[#2563EB] rounded-lg flex items-center justify-center">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                    </div>
+                    <span class="font-bold text-lg text-[#0F172A]" style="font-family:'Space Grotesk',sans-serif;">MAL-X Software</span>
+                </div>
                 <h1 class="text-2xl md:text-3xl font-bold text-gray-800 tracking-tight">Admin Sign In</h1>
-                <p class="text-gray-500 mt-2">Sign in to access the admin area</p>
+                <p class="text-gray-500 mt-2">Sign in to access the admin panel</p>
             </div>
 
             <form asp-controller="Account" asp-action="Login" method="post" class="space-y-5">
@@ -24,7 +30,7 @@
                     <input asp-for="Email"
                            type="text"
                            autocomplete="username"
-                           class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#b39359] focus:border-[#b39359]"
+                           class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-[#2563EB]"
                            placeholder="Enter your email or username" />
                     <span asp-validation-for="Email" class="text-red-600 text-sm"></span>
                 </div>
@@ -34,7 +40,7 @@
                     <input asp-for="Password"
                            type="password"
                            autocomplete="current-password"
-                           class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#b39359] focus:border-[#b39359]"
+                           class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:border-[#2563EB]"
                            placeholder="Enter your password" />
                     <span asp-validation-for="Password" class="text-red-600 text-sm"></span>
                 </div>
@@ -42,19 +48,19 @@
                 <div class="flex items-center">
                     <input asp-for="RememberMe"
                            type="checkbox"
-                           class="h-4 w-4 rounded border-gray-300 text-[#b39359] focus:ring-[#b39359]" />
+                           class="h-4 w-4 rounded border-gray-300 text-[#2563EB] focus:ring-[#2563EB]" />
                     <label asp-for="RememberMe" class="ml-2 block text-sm text-gray-700">Remember me</label>
                 </div>
 
                 <button type="submit"
-                        class="w-full bg-[#1E403F] text-white py-3 px-4 rounded-lg font-semibold hover:bg-[#163332] focus:outline-none focus:ring-2 focus:ring-[#b39359] focus:ring-offset-2 transition-colors">
+                        class="w-full bg-[#2563EB] text-white py-3 px-4 rounded-lg font-semibold hover:bg-[#1D4ED8] focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:ring-offset-2 transition-colors">
                     Sign In
                 </button>
             </form>
 
            
             <p class="mt-2 text-center text-sm text-gray-500">
-                <a asp-controller="Home" asp-action="Index" class="text-[#b39359] hover:underline">Back to home</a>
+                <a asp-controller="Home" asp-action="Index" class="text-[#2563EB] hover:underline">← Back to MAL-X Home</a>
             </p>
         </div>
     </div>

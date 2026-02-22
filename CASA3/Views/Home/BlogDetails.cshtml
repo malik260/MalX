@@ -6,8 +6,8 @@
 <section class="bg-white py-12">
     <div class="max-w-7xl mx-auto px-6">
         <a href="@Url.Action("Blog", "Home")" class="text-sm text-gray-600 hover:text-gray-800">← Back to Blog</a>
-        <h1 class="text-4xl font-bold mt-6 mb-2" style="color: #4A4A4A;">@Model.Title</h1>
-        <p class="text-sm text-gray-500 mb-6">@Model.PublishedDate.ToString("MMMM dd, yyyy") &middot; <span class="font-semibold">@Model.Author</span> &middot; <span style="color:#b39359;">@Model.Category</span></p>
+        <h1 class="text-4xl font-bold mt-6 mb-2 text-[#0F172A]" style="font-family:'Space Grotesk',sans-serif;">@Model.Title</h1>
+        <p class="text-sm text-gray-500 mb-6">@Model.PublishedDate.ToString("MMMM dd, yyyy") &middot; <span class="font-semibold">@Model.Author</span> &middot; <span class="text-[#2563EB] font-semibold">@Model.Category</span></p>
         @if (!string.IsNullOrEmpty(Model.CoverImageUrl))
         {
             <div class="mb-6 overflow-hidden rounded-lg shadow-md">

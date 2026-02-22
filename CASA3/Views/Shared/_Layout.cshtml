@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>@ViewData["Title"] - Casa III</title>
+    <title>@ViewData["Title"] - MAL-X Software Limited</title>
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -15,7 +15,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 
     <!-- Tailwind -->
@@ -135,60 +135,63 @@
 <body class="flex flex-col min-h-screen text-gray-800">
 
     <!-- ================= HEADER ================= -->
-    <header class="bg-white border-b sticky top-0 z-50">
+    <header class="bg-[#0F172A] border-b border-[#1E293B] sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between items-center h-16">
 
                 <!-- Logo -->
-                <a asp-controller="Home" asp-action="Index" class="flex items-center">
-                    <img src="~/images/logo.png" alt="CASA III REALTY" class="h-10 md:h-12">
+                <a asp-controller="Home" asp-action="Index" class="flex items-center gap-3">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 bg-[#2563EB] rounded-lg flex items-center justify-center">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                        </div>
+                        <span class="text-white font-bold text-lg tracking-wide" style="font-family:'Space Grotesk',sans-serif;">MAL-X <span class="text-[#2563EB]">Software</span></span>
+                    </div>
                 </a>
 
                 <!-- Desktop Nav -->
                 <nav class="hidden md:flex items-center space-x-6 text-sm font-medium">
-                    <a asp-controller="Home" asp-action="AboutUs" class="text-gray-700 hover:text-gray-900 transition-colors">About Us</a>
+                    <a asp-controller="Home" asp-action="Index" class="text-gray-300 hover:text-white transition-colors">Home</a>
+                    <a asp-controller="Home" asp-action="AboutUs" class="text-gray-300 hover:text-white transition-colors">About Us</a>
+                    <a asp-controller="Home" asp-action="OurProject" class="text-gray-300 hover:text-white transition-colors">Our Work</a>
 
-                    <!-- Dropdown -->
-                    <div class="relative group">
-                        <a asp-controller="Home" asp-action="OurProject" class="flex items-center gap-1 text-gray-700 hover:text-gray-900 transition-colors border-b-2 border-transparent hover:border-gray-700">
-                            Our Projects <i class="fa fa-chevron-down text-xs"></i>
+                    <!-- Projects Dropdown -->
+                    @* <div class="relative group">
+                        <a asp-controller="Home" asp-action="OurProject" class="flex items-center gap-1 text-gray-300 hover:text-white transition-colors border-b-2 border-transparent hover:border-[#2563EB]">
+                            Our Work <i class="fa fa-chevron-down text-xs"></i>
                         </a>
-                        <!-- Invisible padding area to prevent dropdown from closing -->
                         <div class="absolute left-0 top-full w-full h-2"></div>
-                        <div class="absolute left-0 top-full pt-2 w-56 bg-white shadow-xl border border-gray-200 rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 max-h-96 overflow-y-auto z-50">
+                        <div class="absolute left-0 top-full pt-2 w-56 bg-[#1E293B] shadow-xl border border-[#334155] rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 max-h-96 overflow-y-auto z-50">
                             @await Component.InvokeAsync("Navigation")
                         </div>
                     </div>
-
-                    <a asp-controller="Home" asp-action="ContactUs" class="text-gray-700 hover:text-gray-900 transition-colors">Contact Us</a>
-                    <a asp-controller="Home" asp-action="Blog" class="text-gray-700 hover:text-gray-900 transition-colors">Blog</a>
-                    <a href="/Become-A-Vendor" class="text-gray-700 hover:text-gray-900 transition-colors">Become A Vendor</a>
-                    <a asp-controller="Home" asp-action="BecomeAnAffiliate" class="text-gray-700 hover:text-gray-900 transition-colors">Become An Affiliate</a>
-                    <a asp-controller="Account" asp-action="Login" asp-route-returnUrl="/Admin" class="text-gray-700 hover:text-gray-900 transition-colors">Admin</a>
+ *@
+                    <a asp-controller="Home" asp-action="ContactUs" class="text-gray-300 hover:text-white transition-colors">Contact Us</a>
+                    <a asp-controller="Home" asp-action="Blog" class="text-gray-300 hover:text-white transition-colors">Blog</a>
+                    <a asp-controller="Account" asp-action="Login" asp-route-returnUrl="/Admin" class="bg-[#2563EB] text-white px-4 py-2 rounded-lg hover:bg-[#1D4ED8] transition-colors text-sm font-semibold">Admin</a>
                 </nav>
 
                 <!-- Mobile Menu Button -->
-                <button id="mobileMenuBtn" class="md:hidden text-2xl">
+                <button id="mobileMenuBtn" class="md:hidden text-2xl text-white">
                     <i class="fa fa-bars"></i>
                 </button>
             </div>
         </div>
 
         <!-- Mobile Menu -->
-        <div id="mobileMenu" class="hidden md:hidden border-t bg-white">
+        <div id="mobileMenu" class="hidden md:hidden border-t border-[#1E293B] bg-[#0F172A]">
             <div class="px-4 py-4 space-y-3 text-sm">
-                <a asp-controller="Home" asp-action="AboutUs" class="block text-gray-800">About Us</a>
+                <a asp-controller="Home" asp-action="Index" class="block text-gray-300 hover:text-white">Home</a>
+                <a asp-controller="Home" asp-action="AboutUs" class="block text-gray-300 hover:text-white">About Us</a>
                 <details>
-                    <summary class="cursor-pointer text-gray-800">Our Projects</summary>
+                    <summary class="cursor-pointer text-gray-300 hover:text-white">Our Work</summary>
                     <div class="ml-4 mt-2 space-y-2">
                         @await Component.InvokeAsync("Navigation")
                     </div>
                 </details>
-                <a asp-controller="Home" asp-action="ContactUs" class="block text-gray-800">Contact Us</a>
-                <a asp-controller="Home" asp-action="Blog" class="block text-gray-800">Blog</a>
-                <a href="/Become-A-Vendor" class="block text-gray-800">Become A Vendor</a>
-                <a asp-controller="Home" asp-action="BecomeAnAffiliate" class="block text-gray-800">Become An Affiliate</a>
-                <a asp-controller="Account" asp-action="Login" asp-route-returnUrl="/Admin" class="block text-gray-800">Admin</a>
+                <a asp-controller="Home" asp-action="ContactUs" class="block text-gray-300 hover:text-white">Contact Us</a>
+                <a asp-controller="Home" asp-action="Blog" class="block text-gray-300 hover:text-white">Blog</a>
+                <a asp-controller="Account" asp-action="Login" asp-route-returnUrl="/Admin" class="block text-[#2563EB] font-semibold">Admin</a>
             </div>
         </div>
     </header>
@@ -199,98 +202,129 @@
     </main>
 
     <!-- ================= FOOTER ================= -->
-    <footer class="bg-gray-100 mt-20">
+    <footer class="bg-[#0F172A] mt-20">
 
         <!-- Newsletter -->
-        <section class="relative flex bg-cover bg-center" style="background-image: url('/images/newsletter-bg.jpg');">
-            <!-- Left Section (2/3 width) - Light Grey Background -->
-            <div class="w-full lg:w-2/3 py-16 lg:py-20">
-                <div class="max-w-4xl mx-auto px-6 lg:px-12">
-                    <!-- Main Title -->
-                    <div class="mb-8">
-                        <h2 class="inline-block border-2 border-gray-800 px-6 py-3 text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800 tracking-wide uppercase">
-                            GET THE CASA III ADVANTAGE
+        <section class="bg-[#1E293B] py-14">
+            <div class="max-w-7xl mx-auto px-6 lg:px-12">
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <!-- Left: Text -->
+                    <div>
+                        <h2 class="text-2xl md:text-3xl font-bold text-white mb-3 tracking-wide">
+                            STAY AHEAD WITH <span class="text-[#2563EB]">MAL-X INSIGHTS</span>
                         </h2>
-                    </div>
-
-                    <!-- Social Media Icons and Phone -->
-                    <div class="flex items-center justify-between mb-12">
+                        <p class="text-gray-400 mb-6 text-base">Get the latest software trends, product updates, and industry news delivered to your inbox.</p>
                         <!-- Social Icons -->
-                        <div class="flex items-center gap-4 text-2xl text-gray-800">
-                            <a href="#" class="hover:text-gray-600 transition"><i class="fa fa-facebook"></i></a>
-                            <a href="#" class="hover:text-gray-600 transition"><i class="fa fa-instagram"></i></a>
-                            <a href="#" class="hover:text-gray-600 transition"><i class="fa fa-linkedin"></i></a>
-                            <a href="#" class="hover:text-gray-600 transition"><i class="fa fa-twitter"></i></a>
-                        </div>
-
-                        <!-- Vertical Divider -->
-                        <span class="w-px h-8 bg-gray-800"></span>
-
-                        <!-- Phone - Far Right -->
-                        <div class="flex items-center gap-2 text-gray-800 font-medium">
-                            <i class="fa fa-phone"></i>
-                            <span>(+234) 700-222-2111</span>
+                        <div class="flex items-center gap-4 text-xl text-gray-400">
+                            <a href="#" class="hover:text-[#2563EB] transition"><i class="fa fa-facebook"></i></a>
+                            <a href="#" class="hover:text-[#2563EB] transition"><i class="fa fa-instagram"></i></a>
+                            <a href="#" class="hover:text-[#2563EB] transition"><i class="fa fa-linkedin"></i></a>
+                            <a href="#" class="hover:text-[#2563EB] transition"><i class="fa fa-twitter"></i></a>
+                            <span class="w-px h-6 bg-gray-600 mx-2"></span>
+                            <div class="flex items-center gap-2 text-gray-300 text-sm font-medium">
+                                <i class="fa fa-phone text-[#2563EB]"></i>
+                                <span>(+234) 800-MAL-XSFT</span>
+                            </div>
                         </div>
                     </div>
-
-                    <!-- Newsletter Subscription Form -->
-                    <form id="newsletterForm" asp-controller="Home" asp-action="SubscribeNewsletter" class="flex flex-col gap-3" method="post">
-                        <input id="newsletterEmail" type="email" name="Email" placeholder="Enter your email address to subscribe to our newsletter"
-                               class="w-full border-2 border-[#b39359] bg-white px-4 py-3 text-gray-800 placeholder-gray-500
-                                      focus:outline-none focus:ring-2 focus:ring-[#b39359] focus:border-[#b39359]" />
-
-                        <button id="newsletterSubmit" type="submit" class="w-1/2 mx-auto bg-black text-white px-8 py-3 font-medium hover:bg-[#b39359] rounded-lg transition-colors duration-200">
-                            Subscribe
-                        </button>
-                    </form>
+                    <!-- Right: Form -->
+                    <div>
+                        <form id="newsletterForm" asp-controller="Home" asp-action="SubscribeNewsletter" class="flex flex-col gap-3" method="post">
+                            <input id="newsletterEmail" type="email" name="Email" placeholder="Enter your email address"
+                                   class="w-full border-2 border-[#2563EB] bg-[#0F172A] px-4 py-3 text-white placeholder-gray-500 rounded-lg
+                                          focus:outline-none focus:ring-2 focus:ring-[#2563EB]" />
+                            <button id="newsletterSubmit" type="submit" class="w-full bg-[#2563EB] text-white px-8 py-3 font-semibold rounded-lg hover:bg-[#1D4ED8] transition-colors duration-200">
+                                Subscribe to Newsletter
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
-
-            <!-- Right Section (1/3 width) - Architectural Image -->
-            <div class="hidden lg:block w-1/3 relative">
-                <div class="absolute inset-0 bg-black/10"></div>
-            </div>
         </section>
+
+        <!-- Footer Links + Partners -->
+        <div class="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-4 gap-10 border-b border-[#1E293B]">
+            <!-- Brand Column -->
+            <div class="md:col-span-1">
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="w-8 h-8 bg-[#2563EB] rounded-lg flex items-center justify-center">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                    </div>
+                    <span class="text-white font-bold text-base" style="font-family:'Space Grotesk',sans-serif;">MAL-X Software</span>
+                </div>
+                <p class="text-gray-400 text-sm leading-relaxed">
+                    Engineering the future, one solution at a time. We build world-class software products for businesses across Africa and beyond.
+                </p>
+            </div>
+            <!-- Services -->
+            <div>
+                <h4 class="text-white font-semibold mb-4 uppercase tracking-wider text-sm">Services</h4>
+                <ul class="space-y-2 text-gray-400 text-sm">
+                    <li><a href="#" class="hover:text-[#2563EB] transition">Custom Software Dev</a></li>
+                    <li><a href="#" class="hover:text-[#2563EB] transition">Mobile Applications</a></li>
+                    <li><a href="#" class="hover:text-[#2563EB] transition">Cloud Solutions</a></li>
+                    <li><a href="#" class="hover:text-[#2563EB] transition">UI/UX Design</a></li>
+                    <li><a href="#" class="hover:text-[#2563EB] transition">DevOps & CI/CD</a></li>
+                    <li><a href="#" class="hover:text-[#2563EB] transition">Data & Analytics</a></li>
+                </ul>
+            </div>
+            <!-- Company -->
+            <div>
+                <h4 class="text-white font-semibold mb-4 uppercase tracking-wider text-sm">Company</h4>
+                <ul class="space-y-2 text-gray-400 text-sm">
+                    <li><a asp-controller="Home" asp-action="AboutUs" class="hover:text-[#2563EB] transition">About Us</a></li>
+                    <li><a asp-controller="Home" asp-action="OurProject" class="hover:text-[#2563EB] transition">Our Work</a></li>
+                    <li><a asp-controller="Home" asp-action="Blog" class="hover:text-[#2563EB] transition">Blog & Insights</a></li>
+                    <li><a asp-controller="Home" asp-action="ContactUs" class="hover:text-[#2563EB] transition">Contact Us</a></li>
+                </ul>
+            </div>
+            <!-- Contact -->
+            <div>
+                <h4 class="text-white font-semibold mb-4 uppercase tracking-wider text-sm">Contact</h4>
+                <ul class="space-y-3 text-gray-400 text-sm">
+                    <li class="flex items-start gap-2">
+                        <i class="fa fa-map-marker text-[#2563EB] mt-1"></i>
+                        <span>Plot 47, Tech Hub Drive, Maitama, Abuja FCT, Nigeria</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <i class="fa fa-phone text-[#2563EB]"></i>
+                        <span>(+234) 800-MAL-XSFT</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <i class="fa fa-envelope text-[#2563EB]"></i>
+                        <span>hello@malx-software.com</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
 
         <!-- Partners -->
         @await Component.InvokeAsync("Partners")
 
         <!-- Bottom Bar -->
-        <div class="bg-gray-200 py-6">
-            <div class="max-w-7xl mx-auto px-4 text-sm">
-
-                <!-- Mobile Layout -->
-                <div class="flex flex-col gap-3 md:hidden">
-                    <img src="~/images/logo.png" class="h-8 self-start">
-                    <p class="text-center font-bold text-gray-400 hover:text-black transition-colors duration-200 cursor-default">
-                        © No 47 ML Wushishi Crescent Utako Abuja, Adjacent CBN Quarters
-                    </p>
+        <div class="bg-[#0A0F1E] py-5">
+            <div class="max-w-7xl mx-auto px-4 text-sm flex flex-col md:flex-row items-center justify-between gap-3">
+                <p class="text-gray-500">© @DateTime.Now.Year MAL-X Software Limited. All rights reserved.</p>
+                <div class="flex gap-6 text-gray-500">
+                    <a href="#" class="hover:text-[#2563EB] transition">Privacy Policy</a>
+                    <a href="#" class="hover:text-[#2563EB] transition">Terms of Service</a>
+                    <a href="#" class="hover:text-[#2563EB] transition">Cookie Policy</a>
                 </div>
-
-                <!-- Desktop Layout -->
-                <div class="hidden md:flex items-center relative">
-                    <img src="~/images/logo.png" class="h-8">
-
-                    <p class="absolute left-1/2 -translate-x-1/2 text-center font-bold text-gray-400 hover:text-black transition-colors duration-200 cursor-default">
-                        © No 47 ML Wushishi Crescent Utako Abuja, Adjacent CBN Quarters
-                    </p>
-                </div>
-
             </div>
         </div>
     </footer>
 
     <!-- Fixed Floating Buttons -->
     <div class="fixed right-0 top-1/2 -translate-y-1/2 z-50 flex flex-col items-end gap-2">
-        <!-- Toggle Button (Hide/Show Contact & WhatsApp) -->
-        <button id="toggleContactButtons" class="bg-black text-white p-3 hover:bg-gray-800 transition-colors duration-200">
+        <!-- Toggle Button -->
+        <button id="toggleContactButtons" class="bg-[#0F172A] text-white p-3 hover:bg-[#1E293B] transition-colors duration-200 border border-[#334155]">
             <i class="fa fa-chevron-left" id="toggleIcon"></i>
         </button>
 
-        <!-- Contact Us Button (Vertical Gold Bar) -->
+        <!-- Contact Us Button (Vertical Blue Bar) -->
         <div id="contactButtonsGroup" class="flex flex-col gap-2">
             <div class="relative group">
-                <button class="bg-[#b39359] text-white px-4 py-6 flex flex-col items-center justify-center gap-2 hover:bg-[#9a7a4a] transition-colors duration-200">
+                <button class="bg-[#2563EB] text-white px-4 py-6 flex flex-col items-center justify-center gap-2 hover:bg-[#1D4ED8] transition-colors duration-200">
                     <i class="fa fa-envelope text-xl"></i>
                     <span class="writing-vertical text-sm font-medium">Contact Us</span>
                 </button>
@@ -298,18 +332,18 @@
                 <!-- Contact Form Modal (Shows on Hover) -->
                 <div class="absolute right-full mr-4 top-0 w-80 bg-white rounded-lg shadow-2xl p-6 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
                     <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-semibold text-purple-600">Contact Form</h3>
+                        <h3 class="text-lg font-semibold text-[#2563EB]">Quick Contact</h3>
                         <button class="text-gray-400 hover:text-gray-600">
                             <i class="fa fa-times"></i>
                         </button>
                     </div>
                     <form asp-controller="Home" asp-action="ContactUs" id="modalContactForm" class="space-y-4" method="post">
-                        <input id="modal_Name" name="FirstName" type="text" placeholder="Name" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#b39359]">
-                        <input id="modal_Phone" name="Phone" type="tel" placeholder="Phone*" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#b39359]">
-                        <input id="modal_Email" name="Email" type="email" placeholder="Email*" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#b39359]">
-                        <textarea id="modal_Message" name="Message" placeholder="Message" rows="4" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#b39359]"></textarea>
-                        <button id="modalContactSubmit" type="submit" class="w-full bg-[#b39359] text-white py-2 rounded-lg hover:bg-[#9a7a4a] transition-colors duration-200">
-                            Submit
+                        <input id="modal_Name" name="FirstName" type="text" placeholder="Name" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#2563EB]">
+                        <input id="modal_Phone" name="Phone" type="tel" placeholder="Phone*" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#2563EB]">
+                        <input id="modal_Email" name="Email" type="email" placeholder="Email*" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#2563EB]">
+                        <textarea id="modal_Message" name="Message" placeholder="How can we help you?" rows="4" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#2563EB]"></textarea>
+                        <button id="modalContactSubmit" type="submit" class="w-full bg-[#2563EB] text-white py-2 rounded-lg hover:bg-[#1D4ED8] transition-colors duration-200">
+                            Send Message
                         </button>
                     </form>
                 </div>
@@ -317,11 +351,9 @@
 
             <!-- WhatsApp Button -->
             <div class="relative group">
-                <a href="https://wa.me/2347002222111" target="_blank" class="bg-[#25D366] text-white p-4 rounded-lg flex items-center justify-center hover:bg-[#20BA5A] transition-colors duration-200 shadow-lg">
+                <a href="https://wa.me/2348001234567" target="_blank" class="bg-[#25D366] text-white p-4 rounded-lg flex items-center justify-center hover:bg-[#20BA5A] transition-colors duration-200 shadow-lg">
                     <i class="ri-whatsapp-fill text-2xl"></i>
                 </a>
-                
-                <!-- WhatsApp Tooltip (Shows on Hover) -->
                 <div class="absolute right-full mr-4 top-1/2 -translate-y-1/2 bg-white rounded-lg shadow-lg p-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 whitespace-nowrap">
                     <div class="flex items-center gap-3">
                         <div class="bg-[#25D366] text-white p-2 rounded-full">
@@ -329,7 +361,7 @@
                         </div>
                         <div>
                             <p class="font-semibold text-gray-800">WhatsApp</p>
-                            <p class="text-sm text-gray-600">Chat with us</p>
+                            <p class="text-sm text-gray-600">Chat with MAL-X team</p>
                         </div>
                     </div>
                     <div class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-full">
@@ -342,7 +374,7 @@
 
     <!-- Live Chat Button (Fixed Bottom Right) -->
     <div class="fixed bottom-6 right-6 z-50">
-        <button class="bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition-colors duration-200">
+        <button class="bg-[#2563EB] text-white p-4 rounded-full shadow-lg hover:bg-[#1D4ED8] transition-colors duration-200">
             <svg width="32" height="30" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#ffffff"><g clip-path="url(#messages__clip0_14307_15730)"><path fill-opacity="0.01" d="M0 0h24v24H0z"></path><mask id="messages__b" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24" style="mask-type: alpha;"><g clip-path="url(#messages__clip1_14307_15730)"><g clip-path="url(#messages__clip2_14307_15730)"><mask id="messages__a" maskUnits="userSpaceOnUse" x="1" y="0" width="23" height="23" style="mask-type: alpha;"><path d="M2.571 22.286h-.008.008z"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M17.143 4.286c1.414 0 2.571 1.157 2.571 2.571v8.572c0 1.414-1.157 2.571-2.571 2.571H7.209l-4.037 4.037c-.162.162-.384.247-.606.248-.11 0-.219-.017-.32-.068-.317-.128-.532-.445-.532-.788V6.857c0-1.414 1.157-2.571 2.572-2.571h12.857zM4.286 6c-.472 0-.857.386-.857.857v12.506l2.82-2.82c.162-.163.377-.249.608-.249h10.286c.471 0 .857-.385.857-.857V6.866c0-.472-.386-.857-.857-.857H4.286V6z"></path><path d="M20.571.857c1.415 0 2.572 1.158 2.572 2.572V12c0 .472-.386.857-.857.857-.472 0-.857-.385-.857-.857V3.43c0-.472-.386-.857-.858-.857H7.714c-.471 0-.857-.386-.857-.857 0-.472.386-.858.857-.858h12.857z"></path></mask><g mask="url(#messages__a)"><path d="M-1.714-1.714h27.429v27.429H-1.714z"></path></g></g></g></mask><g mask="url(#messages__b)"><path d="M0 0h24v24H0V0z"></path></g></g><defs><clipPath id="messages__clip0_14307_15730"><path d="M0 0h24v24H0z"></path></clipPath><clipPath id="messages__clip1_14307_15730"><path d="M0 0h24v24H0z"></path></clipPath><clipPath id="messages__clip2_14307_15730"><path transform="translate(-1.714 -1.714)" d="M0 0h27.429v27.429H0z"></path></clipPath></defs></svg>
         </button>
     </div>

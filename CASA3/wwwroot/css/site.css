@@ -1,4 +1,4 @@
-﻿/* Team Member Card Styling */
+/* Team Member Card Styling */
 .team-member-card {
     position: relative;
     transition: all 0.3s ease;
@@ -62,22 +62,31 @@
     }
 }
 .tab-btn {
-    padding: 0.75rem 2.5rem;
-    background-color: #f5f5f5;
-    color: #666;
+    padding: 0.6rem 1.75rem;
+    background-color: #f1f5f9;
+    color: #64748b;
     font-weight: 600;
-    letter-spacing: 0.05em;
-    transition: all 0.3s ease;
-    border-right: 1px solid #ddd;
+    font-size: 0.8rem;
+    letter-spacing: 0.07em;
+    transition: all 0.25s ease;
+    border-radius: 0.5rem;
+    border: 1px solid #e2e8f0;
 }
 
     .tab-btn:last-child {
-        border-right: none;
+        border-right: 1px solid #e2e8f0;
     }
 
     .tab-btn.active {
-        background-color: #2d2d2d;
+        background-color: #0F172A;
         color: white;
+        border-color: #0F172A;
+    }
+
+    .tab-btn:hover:not(.active) {
+        background-color: #EFF6FF;
+        color: #2563EB;
+        border-color: #BFDBFE;
     }
 
 /* ==================== SCROLL EFFECTS ANIMATIONS ==================== */
@@ -285,6 +294,29 @@
         transform: none !important;
         transition: none !important;
     }
+}
+
+/* ==================== MALX BASE STYLES ==================== */
+
+/* Base font */
+body {
+    font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+h1, h2, h3, h4, .brand-heading {
+    font-family: 'Space Grotesk', 'Inter', sans-serif;
+}
+
+/* MAL-X Brand Colors */
+:root {
+    --malx-navy: #0F172A;
+    --malx-blue: #2563EB;
+    --malx-blue-hover: #1D4ED8;
+    --malx-blue-light: #EFF6FF;
+    --malx-blue-muted: #60A5FA;
+    --malx-purple: #7C3AED;
+    --malx-slate: #1E293B;
+    --malx-border: #334155;
 }
 
 /* Smooth scrolling for the entire page */
