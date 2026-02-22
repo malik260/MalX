@@ -106,7 +106,7 @@ namespace Logic.Services
                             ButtonText = model.ButtonText,
                             DisplayOrder = 0,
                             IsActive = true,
-                            CreatedById = cuser.Id
+                            CreatedById = "6e4a48e0-0dc7-4e6d-b4a3-cce4d2bf9fbd"
                         };
 
                         await _context.AddAsync(carousel).ConfigureAwait(false);
